@@ -31,7 +31,8 @@ class Tenant extends BaseTenant implements TenantWithDatabase
     {
         return $this->belongsTo(Restaurant::class);
     }
-    public function Domains(){
-        return $this->hasMany(Domain::class);
+    public function Domain()
+    {
+        return $this->hasOne(Domain::class);
     }
 }

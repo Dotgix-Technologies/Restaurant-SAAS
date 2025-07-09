@@ -23,7 +23,7 @@ export default function Login({
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('Restaurant.login.post'), {
+        post(route('restaurant.login.post'), {
             onFinish: () => reset('password'),
         });
     };

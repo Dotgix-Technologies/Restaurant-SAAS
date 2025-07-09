@@ -1,4 +1,4 @@
-import Table from '@/Components/SuperAdmin/Table';
+import Table, { Column } from '@/Components/SuperAdmin/Table';
 import SuperAdminLayout from '@/Layouts/SuperAdminLayout';
 import { Head } from '@inertiajs/react';
 import React from 'react'
@@ -8,7 +8,7 @@ interface Props {
     users: Array<any>
 }
 const index: React.FC<Props> = ({ users }) => {
-    const columns = [
+    const columns: Column[] = [
         { key: "name", label: "Author", type: "text" },
         { key: "email", label: "Email", type: "text" },
         { key: "role", label: "Role", type: "text" },
@@ -25,8 +25,8 @@ const index: React.FC<Props> = ({ users }) => {
             label: "Actions",
             type: "action",
             actions: [
-                { label: <FontAwesomeIcon icon={faPenToSquare} flip="horizontal" size="lg" />, route: "/SuperAdmin/users/edit", class: "bg-transparent-500" },
-                { label: "Delete", route: "/SuperAdmin/users/delete", class: "bg-red-500" }
+                { label: <FontAwesomeIcon icon={faPenToSquare} flip="horizontal" size="lg" />, route: "/superAdmin/users/edit", class: "bg-transparent-500" },
+                { label: "Delete", route: "/superAdmin/users/delete", class: "bg-red-500" }
             ]
         }
     ];
@@ -41,8 +41,6 @@ const index: React.FC<Props> = ({ users }) => {
             <Head title="Dashboard" />
 
             <Table className="mt-4" title={'Users'} columns={columns} data={users} />
-
-
         </SuperAdminLayout>
     )
 }

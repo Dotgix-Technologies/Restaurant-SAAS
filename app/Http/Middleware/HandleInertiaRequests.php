@@ -30,8 +30,8 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        Log::info($request->session()->get('success'));
-        Log::info($request->session()->get('error'));
+        Log::info($request->session()->get('success').'success');
+        Log::info($request->session()->get('error').'error');
         return [
             ...parent::share($request),
             'auth' => [

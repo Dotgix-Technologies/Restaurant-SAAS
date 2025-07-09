@@ -22,8 +22,9 @@ return new class extends Migration
             $table->string('DBA')->nullable();
             $table->string('cuisine_type')->default('FastFood');
             $table->enum('restaurant_type', ['OnSite', 'CloudKitchen', 'Hybrid'])->default('OnSite');
-            $table->String('Liscience_no')->nullable();
+            $table->String('license_no')->nullable();
             $table->string('subscription_plan')->default('Free');
+            $table->string('logo')->nullable(); // Path to the restaurant logo
             $table->enum('status', ['pending_verification','verified' ,'Approved', 'Active', 'Offline', 'Vacation', 'Deactivaed', 'Suspended'])->default('pending_verification');
             $table->timestamps();
         });

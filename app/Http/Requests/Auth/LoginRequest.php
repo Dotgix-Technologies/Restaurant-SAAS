@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests\Auth;
 
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use Illuminate\Auth\Events\Lockout;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
@@ -52,12 +53,13 @@ class LoginRequest extends FormRequest
         $user = Auth::user();
         // Define role-based login routes
         $roleRoutes = [
-            'SuperAdmin' => 'SuperAdmin/login/post',
-            'Restaurant' => 'Restaurant/login/post',
-            'Client' => 'Client/login/post',
-            'SuperConsultants' => 'SuperConsultants/login/post',
+            'SuperAdmin' => 'superAdmin/login/post',
+            'Restaurant' => 'Restaurant/login',
+            'Client' => 'Client/login',
+            'SuperConsultants' => 'SuperConsultants/login',
         ];
         $currentRoute = $this->path();
+        Log::info('Current route: ' . $currentRoute);
         if (!isset($roleRoutes[$user->role]) || $roleRoutes[$user->role] !== $currentRoute) {
             Auth::logout();
             throw ValidationException::withMessages([

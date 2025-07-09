@@ -48,7 +48,6 @@ class SuperAdminController extends Controller
             'role' => 'required',
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
-
         try {
             $user = User::create($validatedData);
             if ($user) {
@@ -68,19 +67,27 @@ class SuperAdminController extends Controller
     }
     public function UserShow($id)
     {
-        $user = User::with([
-            'Tenants.Restaurant.KycDocuments',
-            'Tenants.Domains',
-            'restaurants.KycDocuments.restaurant'
-        ])->findOrFail($id);
+        $user = User::findOrFail($id);
+
+        if ($user->role === 'Restaurant') {
+            $user->load([
+                'Tenants.Restaurant.KycDocuments',
+                'Tenants.Domain',
+                'restaurants.KycDocuments.restaurant'
+            ]);
+        }
 
         return Inertia::render('SuperAdmin/Users/Show', ['user' => $user]);
     }
     public function UserAction($action, $id)
     {
+
         try {
             $updateUser = User::findOrFail($id);
             $updateUser->status = $action;
+            if ($action == 'verified' || $action == 'approved') {
+                $updateUser->email_verified_at = now();
+            }
             $updateUser->save();
             return redirect()->back()->with('success', '' . $updateUser->name . 'account Have Been ' . $action . ' Sucessfully');
         } catch (Exception $e) {
@@ -88,25 +95,25 @@ class SuperAdminController extends Controller
             return redirect()->back()->with('error', 'Something went wrong' . $e->getMessage());
         }
     }
-    public function UserUpdate(Request $request, $UserId)
+    public function UserUpdate(Request $request,  $UserId)
     {
+        $user = User::findOrFail($UserId);
+        // dd($user);
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'status' => 'required',
         ]);
+        if ($validatedData['status'] == 'verified' || $validatedData['status'] == 'approved') {
+            $validatedData['email_verified_at'] = now();
+        }
         try {
-            $updateUser = User::findOrFail($UserId);
-            $updateUser->name = $request->name;
-            $updateUser->status = $request->status;
-            $updateUser->save();
-            if ($updateUser) {
-                return redirect()->back()->with('success', 'User Have Been Updated Sucessfully');
-            } else {
-                return redirect()->back()->with('error', 'Error While Updating  user');
-            }
+            Log::info(['validated_data' => $validatedData, 'user' => $user]);
+            $user->update($validatedData);
+            Log::info('User updated successfully: ' . $user);
+            return redirect()->back()->with('success', 'User has been updated successfully');
         } catch (Exception $e) {
-            Log::error('Adding while Updating  user' . $e->getMessage());
-            return redirect()->back()->with('error', 'Something went wrong' . $e->getMessage());
+            Log::error('Error while updating user: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
     public function CreateRestaurant(Request $request, $UserId)
@@ -121,13 +128,23 @@ class SuperAdminController extends Controller
                 'restroDBA' => 'nullable|string|max:255',
                 'restrocuisine_type' => 'required|string|in:FastFood,Italian,Chinese,Pakistani,Indian,Thai,Japanese,Mexican,Mediterranean,American,French,Vegan,Other',
                 'restrorestaurant_type' => 'required|in:OnSite,CloudKitchen,Hybrid',
-                'restroLiscience_no' => 'nullable|string|max:255',
+                'restrolicense_no' => 'nullable|string|max:255',
+                'restrologo' => 'nullable|image|mimes:png,jpg,jpeg,webp,gif,ico|max:5060',
                 'restraStatus' => 'required|in:pending_verification,Approved,Active,Offline,Vacation,Deactivaed,Suspended'
             ]);
 
             // Create new restaurant record
             $restaurant = new Restaurant();
             $restaurant->owner_id = $UserId;
+            // Handle logo upload if present
+            if ($request->hasFile('restrologo')) {
+                $file = $request->file('restrologo');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                // Move file directly to public/restaurants/logos
+                $file->move(public_path('gallery/' . $UserId), $filename);
+                // Save only the relative path
+                $restaurant->logo = 'gallery/' . $UserId . '/' . $filename; // No "public"
+            }
             $restaurant->name = $validateData['restroName'];
             $restaurant->email = $validateData['restroEmail'];
             $restaurant->phone = $validateData['restroPhone'];
@@ -136,7 +153,7 @@ class SuperAdminController extends Controller
             $restaurant->DBA = $validateData['restroDBA'] ?? null;
             $restaurant->cuisine_type = $validateData['restrocuisine_type'];
             $restaurant->restaurant_type = $validateData['restrorestaurant_type'];
-            $restaurant->Liscience_no = $validateData['restroLiscience_no'] ?? null;
+            $restaurant->license_no = $validateData['restrolicense_no'] ?? null;
             $restaurant->subscription_plan = 'Free';
             $restaurant->status = $validateData['restraStatus'] ?? 'pending_verification';
 
@@ -195,26 +212,39 @@ class SuperAdminController extends Controller
         try {
             // Validate the request
             $validatedData = $request->validate([
-                'tenenrestroId' => 'required|exists:restaurants,id', // Ensure restaurant exists
-                'tenentDomain' => 'required|string|unique:domains,domain|max:255', // Ensure domain is unique
+                'tenenrestroId' => 'required|exists:restaurants,id',
+                'tenentDomain' => 'required|string|unique:domains,domain|max:255',
             ]);
+
+            // Check if the restaurant already has a tenant
+            $existingTenant = Tenant::where('restaurant_id', $validatedData['tenenrestroId'])->first();
+            if ($existingTenant) {
+                return redirect()->back()->withErrors(['tenenrestroId' => 'This restaurant already has a tenant.'])->withInput();
+            }
+
             // Create the tenant
             $tenant = Tenant::create([
                 'restaurant_id' => $validatedData['tenenrestroId'],
-                'user_id' =>  $UserId,
+                'user_id' => $UserId,
                 'data' => []
             ]);
-            $domain = new Domain();
-            $domain->domain = $validatedData['tenentDomain'] . '.' . config('app.domain');
-            $domain->tenant_id = $tenant->id;
-            $domain->save();
-            // Redirect back with success message
+
+            // Create and associate domain
+            Domain::create([
+                'domain' => $validatedData['tenentDomain'] . '.' . config('app.domain'),
+                'tenant_id' => $tenant->id
+            ]);
+
             return redirect()->back()->with('success', 'Tenant created successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::info($e);
             return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $ex) {
+            Log::error($ex);
+            return redirect()->back()->with('error', 'An unexpected error occurred.')->withInput();
         }
     }
+
     public function KycDocUpload(Request $request, $restroId)
     {
         try {
@@ -243,4 +273,9 @@ class SuperAdminController extends Controller
             return redirect()->back()->withErrors($e->errors())->withInput();
         }
     }
+    public function ThemeCreate()
+    {
+        return Inertia::render('SuperAdmin/Themes/Create');
+    }
+    public function ThemeStore(Request $request) {}
 }

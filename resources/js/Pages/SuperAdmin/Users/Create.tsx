@@ -1,8 +1,8 @@
-import FormSelect from '@/Components/SuperAdmin/FormSelect';
-import InputError from '@/Components/SuperAdmin/InputError';
-import InputLabel from '@/Components/SuperAdmin/InputLabel';
-import SubmitButton from '@/Components/SuperAdmin/SubmitButton';
-import TextInput from '@/Components/SuperAdmin/TextInput';
+import FormSelect from '@/Components/Restaurant/FormSelect';
+import InputError from '@/Components/Restaurant/InputError';
+import InputLabel from '@/Components/Restaurant/InputLabel';
+import SubmitButton from '@/Components/Restaurant/SubmitButton';
+import TextInput from '@/Components/Restaurant/TextInput';
 import SuperAdminLayout from '@/Layouts/SuperAdminLayout';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import Swal from 'sweetalert2'
@@ -20,9 +20,9 @@ const Create: React.FC = () => {
 
     const roleOptions = [
         { value: "SuperAdmin", label: "SuperAdmin" },
-        { value: "Restaurants", label: "Restaurants Owner" },
-        { value: "Clients", label: "Clients" },
-        { value: "SuperConsultants", label: "SuperConsultants" }
+        { value: "Restaurant", label: "Restaurant Owner" },
+        { value: "Client", label: "Client" },
+        { value: "SuperConsultant", label: "SuperConsultant" }
     ];
 
     const { flash } = usePage().props as { flash?: { success?: string, error?: String } };
@@ -32,7 +32,6 @@ const Create: React.FC = () => {
         try {
             post(route('SuperAdmin.users.store'), {
                 onFinish: () => reset('name', 'email', 'role', 'password', 'password_confirmation'),
-
                 onSuccess: () => {
                     let successMessage = flash?.success;
                     MySwal.fire({
@@ -133,6 +132,7 @@ const Create: React.FC = () => {
                                 <InputLabel htmlFor="role" value="Role" />
                                 <div className="mt-2">
                                     <FormSelect
+                                        defaultValue={roleOptions[0].value}
                                         options={roleOptions}
                                         value={data.role}
                                         onChange={(value) => setData('role', value)}

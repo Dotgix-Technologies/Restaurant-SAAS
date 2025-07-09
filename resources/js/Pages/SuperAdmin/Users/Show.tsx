@@ -1,20 +1,23 @@
-import Table,{Column } from '@/Components/SuperAdmin/Table';
+import Table, { Column } from '@/Components/SuperAdmin/Table';
 import SuperAdminLayout from '@/Layouts/SuperAdminLayout';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import React, { ChangeEvent, FormEventHandler, useEffect, useState } from 'react';
-import FormSelect from '@/Components/SuperAdmin/FormSelect';
-import TextInput from '@/Components/SuperAdmin/TextInput';
-import InputError from '@/Components/SuperAdmin/InputError';
-import InputLabel from '@/Components/SuperAdmin/InputLabel';
-import SubmitButton from '@/Components/SuperAdmin/SubmitButton';
+import FormSelect from '@/Components/Restaurant/FormSelect';
+import TextInput from '@/Components/Restaurant/TextInput';
+import InputError from '@/Components/Restaurant/InputError';
+import InputLabel from '@/Components/Restaurant/InputLabel';
+import SubmitButton from '@/Components/Restaurant/SubmitButton';
 import { machine } from 'node:os';
 import InputLocation from '@/Components/SuperAdmin/InputLocation';
 import Create from './Create';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faSpinner, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { kycDocumentTypesOptions as KycDocOption, KycDocument } from '@/types/kyc_documents';
+import { Restaurant } from '@/types/restarurant';
+import { error } from 'node:console';
 const MySwal = withReactContent(Swal)
 interface Props {
     user: any;
@@ -35,12 +38,13 @@ const Show: React.FC<Props> = ({ user }) => {
         restroName: string;
         restroEmail: string;
         restroPhone: string;
+        restrologo: File | null;
         restroaddress: string;
         restrolocation: string;
         restroDBA: string;
         restrocuisine_type: string;
         restrorestaurant_type: string;
-        restroLiscience_no: string;
+        restrolicense_no: string;
         restraStatus: string;
         tenenrestroId: string;
         tenentDomain: string;
@@ -51,6 +55,7 @@ const Show: React.FC<Props> = ({ user }) => {
     }>({
         name: user.name,
         status: user.status,
+        restrologo: null,
         restroName: '',
         restroEmail: '',
         restroPhone: '',
@@ -59,7 +64,7 @@ const Show: React.FC<Props> = ({ user }) => {
         restroDBA: '',
         restrocuisine_type: '',
         restrorestaurant_type: '',
-        restroLiscience_no: '',
+        restrolicense_no: '',
         restraStatus: '',
         tenenrestroId: '',
         tenentDomain: '',
@@ -106,13 +111,10 @@ const Show: React.FC<Props> = ({ user }) => {
         { value: "CloudKitchen", label: "CloudKitchen" },
         { value: "Hybrid", label: "Hybrid" },
     ];
-    const kycDocumentTypesOptions = [
-        { value: "business_license", label: "Business License" },
-        { value: "tax_certificate", label: "Tax Certificate" },
-        { value: "health_permit", label: "Health Permit" }
-    ];
+
     const Updateuser: FormEventHandler = (e) => {
         e.preventDefault();
+        console.log('user data', user.id, data);
         try {
             post(route('SuperAdmin.user.update', user.id), {
 
@@ -168,6 +170,8 @@ const Show: React.FC<Props> = ({ user }) => {
         try {
             post(route('SuperAdmin.restaurant.create', user.id), {
                 onSuccess: () => {
+                    
+                    reset();
                     let successMessage = flash?.success;
                     MySwal.fire({
                         toast: true,
@@ -178,6 +182,7 @@ const Show: React.FC<Props> = ({ user }) => {
                         timer: 3000,
                         showConfirmButton: false
                     });
+                    setShowRestaurantForm(prev => !prev)
                 },
                 onError: (error) => {
                     let errorMessage = 'An error occurred!';
@@ -219,6 +224,7 @@ const Show: React.FC<Props> = ({ user }) => {
         try {
             post(route('SuperAdmin.tenent.create', user.id), {
                 onSuccess: () => {
+                    reset();
                     let successMessage = flash?.success;
                     MySwal.fire({
                         toast: true,
@@ -270,6 +276,7 @@ const Show: React.FC<Props> = ({ user }) => {
 
             post(route('SuperAdmin.restaurant.document.upload', data.kycrestroId), {
                 onSuccess: () => {
+                    reset();
                     let successMessage = flash?.success;
                     MySwal.fire({
                         toast: true,
@@ -316,7 +323,7 @@ const Show: React.FC<Props> = ({ user }) => {
             });
         }
     }
-    const columns:Column[]= [
+    const columns: Column[] = [
         { key: "name", label: "Name", type: "text" },
         { key: "email", label: "Email", type: "text" },
         { key: "role", label: "Role", type: "text" },
@@ -329,7 +336,7 @@ const Show: React.FC<Props> = ({ user }) => {
         },
         { key: "created_at", label: "Joined", type: "date" },
     ];
-    const restaurantColumns:Column[] = [
+    const restaurantColumns: Column[] = [
         { key: "id", label: "ID", type: "text" },
         { key: "name", label: "Restaurant Name", type: "text" },
         { key: "email", label: "Email", type: "text" },
@@ -339,18 +346,19 @@ const Show: React.FC<Props> = ({ user }) => {
         { key: "DBA", label: "DBA(Doing Buisness ass)", type: "text" },
         { key: "cuisine_type", label: "Cuisine", type: "text" },
         { key: "restaurant_type", label: "RESTAURANT TYPE", type: "text" },
-        { key: "Liscience_no", label: "licience no", type: "text" },
+        { key: "license_no", label: "licience no", type: "text" },
         { key: "subscription_plan", label: "subscription", type: "status", conditions: { Free: "bg-gray-500", Standard: "bg-yellow-500", Premium: "bg-green-500" } },
         { key: "kyc_documents", label: "KycDocuments", type: "nestedColumns", nestedColumns: [{ key: "type", label: "Doc Type", type: "text" }, { key: "document_path", label: "Document", type: "file" }] },
         { key: "status", label: "status", type: "status", conditions: { Active: "bg-green-500", Offline: "bg-yellow-500", Vacation: "bg-yellow-500", Deactivaed: "bg-red-500", Approved: "bg-green-500", verified: "bg-green-500", pending_verification: "bg-red-500", Suspended: "bg-red-800" } },
         { key: "created_at", label: "Joined", type: "date" },
+        { key: "logo", label: "Logo", type: "image" },
         { key: "updated_at", label: "last updated", type: "date" },
         {
             key: "action",
             label: "Actions",
             type: "putaction",
             putactions: {
-                route: "/SuperAdmin/restaurant/action",
+                route: "/superAdmin/restaurant/action",
                 class: "bg-gray-200 dark:bg-blue-950",
                 options: [
                     { value: "verified", label: "Verified" },
@@ -366,22 +374,21 @@ const Show: React.FC<Props> = ({ user }) => {
             }
         },
     ];
-    const tenantColumns:Column[] = [
+    const tenantColumns: Column[] = [
         { key: "id", label: "ID", type: "text" },
         { key: "tenancy_db_name", label: "Database name", type: "text" },
-        { key: "domains", label: "Domains", type: "nestedColumns", nestedColumns: [{ key: "domain", label: "Domain", type: "text" }, { key: "created_at", label: "Created At", type: "date" }] },
+        { key: "domain", label: "Domains", type: "nestedColumns", nestedColumns: [{ key: "domain", label: "Domain", type: "text" }, { key: "created_at", label: "Created At", type: "date" }] },
         { key: "created_at", label: "Created at", type: "date" },
         { key: "updated_at", label: "Updated at", type: "date" },
     ];
-
-    const kycColumns:Column[]= [
+    const kycColumns: Column[] = [
         { key: "id", label: "ID", type: "text" },
-        { key: "restaurant", label: "Restaurant", type: "nestedColumns", nestedColumns: [ { key: "name", label: "Restaurant", type: "text" },{ key: "id", label: "Restaurant id", type: "text" }] },
+        { key: "restaurant", label: "Restaurant", type: "nestedColumns", nestedColumns: [{ key: "name", label: "Restaurant", type: "text" }, { key: "id", label: "Restaurant id", type: "text" }] },
         { key: "type", label: "KYC Document Type", type: "text" },
-        { key: "status", label: "status", type: "status", conditions: { pending_approval: "bg-yellow-800", Approved: "bg-green-500", Rejected: "bg-red-500"} },
-        { key: "document_path", label: "Document", type: "file"},
-        { key: "created_at", label: "Uploaded At", type: "date"},
-        { key: "updated_at", label: "Updated At", type: "date"},
+        { key: "status", label: "status", type: "status", conditions: { pending_approval: "bg-yellow-800", Approved: "bg-green-500", Rejected: "bg-red-500" } },
+        { key: "document_path", label: "Document", type: "file" },
+        { key: "created_at", label: "Uploaded At", type: "date" },
+        { key: "updated_at", label: "Updated At", type: "date" },
         {
             key: "action",
             label: "Actions",
@@ -397,21 +404,32 @@ const Show: React.FC<Props> = ({ user }) => {
             }
         },
     ];
-    const userRole = user?.role || "unknown";  // Default role if undefined
+    const userRole = user?.role || "unknown";
     const tenants = user?.tenants || [];
     const restaurants = user?.restaurants || [];
-    const domains = user?.tenants?.[0]?.domains || [];
-    const kycDocuments = user?.restaurants?.[0]?.kyc_documents || [];
+    const domains = user?.tenants?.[0]?.domain || [];
+    const kycDocuments: KycDocument[] = restaurants
+        .flatMap((r: { kyc_documents: any; }) => r.kyc_documents ?? [])
+        .sort((a: { status: string; }, b: { status: string; }) => {
+            if (a.status === 'pending_approval' && b.status !== 'pending_approval') return -1;
+            if (a.status !== 'pending_approval' && b.status === 'pending_approval') return 1;
+            return 0;
+        });
 
+    const selectedRestaurant: Restaurant | undefined = restaurants.find(
+        (restro: { id: number; }) => restro.id === Number(data.kycrestroId)
+    );
+    const kycDocumentTypesOptions = selectedRestaurant ? KycDocOption[selectedRestaurant.restaurant_type] : [];
+    console.log(restaurants);
     const checkDomainAvailability = async (domain: String) => {
         if (!domain) {
             setIsValid(null); // Reset state if input is empty
             return;
         }
-
         setLoading(true);
         try {
-            const response = await axios.get(`/SuperAdmin/tenant/check/domain/${domain}`);
+            const response = await axios.get(`/superAdmin/tenant/check/domain/${domain}`);
+            errors.tenentDomain = response.data.available ? '' : 'Domain is already taken';
             setIsValid(response.data.available);
         } catch (error) {
             console.error("Error checking domain:", error);
@@ -421,9 +439,12 @@ const Show: React.FC<Props> = ({ user }) => {
         }
     };
     useEffect(() => {
+        console.log('logining', restaurants[data.kycrestroId], data, kycDocumentTypesOptions);
+    }, [data, kycDocumentTypesOptions])
+    useEffect(() => {
         const timeout = setTimeout(() => {
             checkDomainAvailability(data.tenentDomain);
-        }, 500); 
+        }, 500);
         return () => clearTimeout(timeout);
     }, [data.tenentDomain]);
     return (
@@ -441,15 +462,15 @@ const Show: React.FC<Props> = ({ user }) => {
                 title="User Details"
                 headcustomaction={
                     user.status === 'pending_verification' ? (
-                        <Link href={`/SuperAdmin/users/approved/${user.id}`} className="text-white bg-green-500 px-2 py-1 rounded-full text-xs">
+                        <Link href={`/superAdmin/users/approved/${user.id}`} className="text-white bg-green-500 px-2 py-1 rounded-full text-xs">
                             Approve
                         </Link>
-                    ) : user.status === 'approved' ? (
-                        <Link href={`/SuperAdmin/users/suspended/${user.id}`} className="text-white bg-red-500 px-2 py-1 rounded-full text-xs">
+                    ) : user.status === 'approved' || user.status === 'verified' ? (
+                        <Link href={`/superAdmin/users/suspended/${user.id}`} className="text-white bg-red-500 px-2 py-1 rounded-full text-xs">
                             Suspend
                         </Link>
                     ) : user.status === 'suspended' ? (
-                        <Link href={`/SuperAdmin/users/approved/${user.id}`} className="text-white bg-blue-500 px-2 py-1 rounded-full text-xs">
+                        <Link href={`/superAdmin/users/approved/${user.id}`} className="text-white bg-blue-500 px-2 py-1 rounded-full text-xs">
                             Reactivate
                         </Link>
                     ) : null
@@ -485,6 +506,7 @@ const Show: React.FC<Props> = ({ user }) => {
                                 <InputLabel htmlFor="Status" value="Status" />
                                 <div className="mt-2">
                                     <FormSelect
+                                        defaultValue={statusOptions[0].value}
                                         options={statusOptions}
                                         value={data.status}
                                         onChange={(value) => setData('status', value)}
@@ -592,7 +614,11 @@ const Show: React.FC<Props> = ({ user }) => {
                                         </div>
                                         <div className="md:flex md:gap-4">
                                             <div className="md:w-1/2">
-                                                <InputLocation data={data} setData={setData} errors={errors} />
+                                                <InputLocation
+                                                    value={data.restrolocation}
+                                                    setData={setData}
+                                                    errors={{ location: errors.restrolocation }}
+                                                />
                                             </div>
                                             <div className="w-full md:w-1/2">
                                                 <InputLabel htmlFor="restroDBA" value="Restaurant Doing Buisness as(DBA)" />
@@ -615,6 +641,7 @@ const Show: React.FC<Props> = ({ user }) => {
                                                 <InputLabel htmlFor="Status" value="Restaurant Cuisine Type" />
                                                 <div className="mt-2">
                                                     <FormSelect
+                                                        defaultValue={restroCuisineOptions[0].value}
                                                         options={restroCuisineOptions}
                                                         value={data.restrocuisine_type}
                                                         onChange={(value) => setData('restrocuisine_type', value)}
@@ -626,6 +653,7 @@ const Show: React.FC<Props> = ({ user }) => {
                                                 <InputLabel htmlFor="restrorestaurant_type" value="Restaurant Type" />
                                                 <div className="mt-2">
                                                     <FormSelect
+                                                        defaultValue={restrorestaurantOptions[0].value}
                                                         options={restrorestaurantOptions}
                                                         value={data.restrorestaurant_type}
                                                         onChange={(value) => setData('restrorestaurant_type', value)}
@@ -636,24 +664,25 @@ const Show: React.FC<Props> = ({ user }) => {
                                         </div>
                                         <div className="md:flex md:gap-4">
                                             <div className="w-full md:w-1/2">
-                                                <InputLabel htmlFor="restroLiscience_no" value="Restaurant Liscience no" />
+                                                <InputLabel htmlFor="restrolicense_no" value="Restaurant Liscience no" />
                                                 <div className="mt-2">
                                                     <TextInput
-                                                        id="restroLiscience_no"
-                                                        name="restroLiscience_no"
-                                                        value={data.restroDBA}
+                                                        id="restrolicense_no"
+                                                        name="restrolicense_no"
+                                                        value={data.restrolicense_no}
                                                         className="block w-full"
-                                                        autoComplete="restroLiscience_no"
-                                                        onChange={(e) => setData('restroLiscience_no', e.target.value)}
+                                                        autoComplete="restrolicense_no"
+                                                        onChange={(e) => setData('restrolicense_no', e.target.value)}
                                                         required
                                                     />
-                                                    <InputError message={errors.restroLiscience_no} className="mt-2" />
+                                                    <InputError message={errors.restrolicense_no} className="mt-2" />
                                                 </div>
                                             </div>
                                             <div className="w-full md:w-1/2">
-                                                <InputLabel htmlFor="restraStatus" value="Restaurant Type" />
+                                                <InputLabel htmlFor="restraStatus" value="Restaurant status" />
                                                 <div className="mt-2">
                                                     <FormSelect
+                                                        defaultValue={restroStatusOptions[0].value}
                                                         options={restroStatusOptions}
                                                         value={data.restraStatus}
                                                         onChange={(value) => setData('restraStatus', value)}
@@ -663,6 +692,80 @@ const Show: React.FC<Props> = ({ user }) => {
                                             </div>
 
                                         </div>
+                                        <div className="md:gap-4">
+                                            <InputLabel htmlFor="restrologo" value="Upload Restaurant Logo" />
+
+                                            <div
+                                                className="border-2 border-dashed border-gray-400 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 transition"
+                                                onClick={() => document.getElementById("restrologo")?.click()} // ✅ Fixed
+                                                onDragOver={(e) => e.preventDefault()}
+                                                onDrop={(e) => {
+                                                    e.preventDefault();
+                                                    const file = e.dataTransfer.files[0];
+
+                                                    if (file && ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/x-icon'].includes(file.type)) {
+                                                        setData({ ...data, restrologo: file });
+                                                    } else {
+                                                        MySwal.fire({
+                                                            toast: true,
+                                                            title: 'Warning!',
+                                                            text: "Only image files (.png, .jpg, .jpeg, .webp, .gif, .ico) are allowed.",
+                                                            icon: 'warning',
+                                                            position: 'top-end',
+                                                            showConfirmButton: false
+                                                        });
+                                                    }
+                                                }}
+                                            >
+                                                {data.restrologo ? (
+                                                    <p className="text-green-500">{data.restrologo.name}</p>
+                                                ) : (
+                                                    <p className="text-gray-500">Drag & Drop your logo here or click to upload</p>
+                                                )}
+
+                                                {/* Hidden File Input */}
+                                                <input
+                                                    id="restrologo"
+                                                    type="file"
+                                                    name="restrologo"
+                                                    accept=".png,.jpg,.jpeg,.webp,.gif,.ico"
+                                                    className="hidden"
+                                                    onChange={(e) => {
+                                                        const file = e.target.files?.[0];
+                                                        if (file && ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/x-icon'].includes(file.type)) {
+                                                            setData({ ...data, restrologo: file });
+                                                        } else {
+                                                            MySwal.fire({
+                                                                toast: true,
+                                                                title: 'Warning!',
+                                                                text: "Only image files (.png, .jpg, .jpeg, .webp, .gif, .ico) are allowed.",
+                                                                icon: 'warning',
+                                                                position: 'top-end',
+                                                                showConfirmButton: false
+                                                            });
+                                                        }
+                                                    }}
+                                                    required
+                                                />
+                                            </div>
+
+                                            {/* ✅ Image Preview */}
+                                            {data.restrologo && (
+                                                <div className="mt-4 flex justify-center">
+                                                    <img
+                                                        src={URL.createObjectURL(data.restrologo)}
+                                                        alt="Preview"
+                                                        className="w-32 h-32 object-contain rounded-lg border"
+                                                    />
+                                                </div>
+                                            )}
+
+                                            {/* Error Message */}
+                                            {errors.restrologo && (
+                                                <p className="mt-2 text-red-500 text-sm">{errors.restrologo}</p>
+                                            )}
+                                        </div>
+
                                         {/* Submit Button */}
                                         <div className="w-full  mt-10 flex justify-center items-center">
                                             <SubmitButton type="submit" className="w-full " disabled={processing}>
@@ -708,7 +811,7 @@ const Show: React.FC<Props> = ({ user }) => {
                                                             required
                                                         >
                                                             <option value="">Choose a Restaurant</option>
-                                                            {restaurants.map((restaurant:any) => (
+                                                            {restaurants.map((restaurant: any) => (
                                                                 <option key={restaurant.id} value={restaurant.id}>
                                                                     {restaurant.name}
                                                                 </option>
@@ -768,7 +871,7 @@ const Show: React.FC<Props> = ({ user }) => {
                                                             required
                                                         >
                                                             <option value="">Choose a Restaurant</option>
-                                                            {restaurants.map((restaurant:any) => (
+                                                            {restaurants.map((restaurant: any) => (
                                                                 <option key={restaurant.id} value={restaurant.id}>
                                                                     {restaurant.name}
                                                                 </option>
@@ -791,7 +894,7 @@ const Show: React.FC<Props> = ({ user }) => {
                                                             required
                                                         >
                                                             <option value="">Choose a Document Type</option>
-                                                            {kycDocumentTypesOptions.map((doc) => (
+                                                            {kycDocumentTypesOptions?.map((doc) => (
                                                                 <option key={doc.value} value={doc.value}>
                                                                     {doc.label}
                                                                 </option>
@@ -899,6 +1002,7 @@ const Show: React.FC<Props> = ({ user }) => {
                 )
             }
         </SuperAdminLayout >
+
     );
 }
 

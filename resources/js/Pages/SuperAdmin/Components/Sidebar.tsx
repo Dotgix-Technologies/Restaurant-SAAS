@@ -1,10 +1,10 @@
-import NavLink from "@/Components/SuperAdmin/NavLink";
+import NavLink from "@/Components/Restaurant/NavLink";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faTachometerAlt, faBars, faTimes, faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import Dropdown from "@/Components/SuperAdmin/Dropdown";
+import Dropdown from "@/Components/Restaurant/Dropdown";
 
 interface SidebarProps {
     isSidebarOpen: boolean;
@@ -53,6 +53,22 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }: SidebarProp
                                 <Dropdown.Link href={route("SuperAdmin.users.index", 'SuperConsultant')}>Super Consultants</Dropdown.Link>
                                 <Dropdown.Link href={route("SuperAdmin.users.index", 'Restaurant')}>Restaurants</Dropdown.Link>
                                 <Dropdown.Link href={route("SuperAdmin.users.index", 'Client')}>Clients</Dropdown.Link>
+                            </Dropdown.Content>
+                        </Dropdown>
+                    </li>
+                    <li>
+                        <Dropdown>
+                            <Dropdown.Trigger>
+                                <div className="flex items-center gap-4 text-sm text-gray-700 dark:text-white font-light px-2 py-3 rounded-lg cursor-pointer">
+                                    <FontAwesomeIcon icon={faUsers} onClick={(e) => isSidebarOpen ? e.preventDefault : setIsSidebarOpen(!isSidebarOpen)} className="text-lg" />
+                                    {isSidebarOpen && "Tenants"}
+                                </div>
+                            </Dropdown.Trigger>
+
+                            <Dropdown.Content align="left">
+                                <Dropdown.Link href={route("SuperAdmin.tenants.create")}>Add</Dropdown.Link>
+                                <Dropdown.Link href={route("SuperAdmin.tenants.index")}>View</Dropdown.Link>
+                                <Dropdown.Link href={route("SuperAdmin.tenants.requests")}>Manage Requests</Dropdown.Link>
                             </Dropdown.Content>
                         </Dropdown>
                     </li>
@@ -125,6 +141,20 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }: SidebarProp
                                 <Dropdown.Link href={route("SuperAdmin.tenants.create")}>Add</Dropdown.Link>
                                 <Dropdown.Link href={route("SuperAdmin.tenants.index")}>View</Dropdown.Link>
                                 <Dropdown.Link href={route("SuperAdmin.tenants.requests")}>Manage Requests</Dropdown.Link>
+                            </Dropdown.Content>
+                        </Dropdown>
+                    </li>
+                    <li>
+                        <Dropdown>
+                            <Dropdown.Trigger>
+                                <div className="flex items-center gap-4 text-sm text-gray-700 dark:text-white font-light px-2 py-3 rounded-lg cursor-pointer">
+                                    <FontAwesomeIcon icon={faUsers} onClick={(e) => isSidebarOpen ? e.preventDefault : setIsSidebarOpen(!isSidebarOpen)} className="text-lg" />
+                                    {isSidebarOpen && "Themes"}
+                                </div>
+                            </Dropdown.Trigger>
+                            <Dropdown.Content align="left">
+                                <Dropdown.Link href={route("SuperAdmin.themes.create")}>Add</Dropdown.Link>
+                                <Dropdown.Link href={route("SuperAdmin.themes.index")}>View</Dropdown.Link>
                             </Dropdown.Content>
                         </Dropdown>
                     </li>

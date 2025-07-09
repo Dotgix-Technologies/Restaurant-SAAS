@@ -16,9 +16,15 @@ class Adminmiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->check() && auth()->user()->role == 'SuperAdmin') {
+        Log::info('Admin middleware accessed by user: ' . (auth()->check() ? auth()->user()->name : 'Guest'));
+        if(!auth()->check()){
+            Log::warning('Unauthorized access attempt to admin middleware by unauthenticated user.');
+            return redirect('SuperAdmin/login')->with('error', 'You must be logged in to access this page.');
+        }
+        if ( auth()->user()->role == 'SuperAdmin') {
+              Log::info('Admin middleware accessed by user: ' . auth()->user()->name);
             return $next($request); 
         }
-        return redirect('/')->with('error', 'Access denied, only admins can use this page.');
+        return redirect('/fuck')->with('error', 'Access denied, only admins can use this page.');
     }
 }

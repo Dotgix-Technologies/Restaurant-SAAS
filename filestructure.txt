@@ -1,6 +1,7 @@
 |-- .editorconfig
 |-- .env
 |-- .env.example
+|-- .env.testing
 |-- .eslintrc.json
 |-- .gitattributes
 |-- .gitignore
@@ -8,6 +9,7 @@
 |-- app
     |-- Http
         |-- Controllers
+            |-- ApplicationController.php
             |-- Auth
                 |-- AuthenticatedSessionController.php
                 |-- ConfirmablePasswordController.php
@@ -34,13 +36,24 @@
                 |-- SuperConsultantController.php
         |-- Middleware
             |-- Adminmiddleware.php
+            |-- Clientmiddleware.php
+            |-- Consultantmiddleware.php
             |-- HandleInertiaRequests.php
             |-- RedirectAdmin.php
+            |-- Restaurantmiddleware.php
         |-- Requests
             |-- Auth
                 |-- LoginRequest.php
             |-- ProfileUpdateRequest.php
+            |-- UpdateRestaurantRequest.php
+        |-- Resources
+            |-- DomainResource.php
+            |-- GalleryResource.php
+            |-- KycDocumentResource.php
+            |-- RestaurantResource.php
+            |-- TenantResource.php
     |-- Models
+        |-- Gallery.php
         |-- KycDocument.php
         |-- Restaurant.php
         |-- Tenant.php
@@ -57,12 +70,14 @@
 |-- config
     |-- app.php
     |-- auth.php
+    |-- broadcasting.php
     |-- cache.php
     |-- database.php
     |-- filesystems.php
     |-- logging.php
     |-- mail.php
     |-- queue.php
+    |-- reverb.php
     |-- services.php
     |-- session.php
     |-- tenancy.php
@@ -78,6 +93,7 @@
         |-- 0001_02_20_195403_create_kyc_documents_table.php
         |-- 2019_09_15_000010_create_tenants_table.php
         |-- 2019_09_15_000020_create_domains_table.php
+        |-- 2025_06_27_194201_create_galleries_table.php
         |-- tenant
             |-- 0001_01_01_000000_create_users_table.php
     |-- seeders
@@ -89,10 +105,49 @@
 |-- public
     |-- .htaccess
     |-- favicon.ico
+    |-- gallery
+        |-- 22
+            |-- 1751996732_20250702_2310_Cloud Kitchen UI Mockup_simple_compose_01jz654qmgf4aa83xavs3t8b4t.png
+            |-- 1751996830_20250702_2302_Desi Restaurant Website Design_simple_compose_01jz64pvx4fye97brs4412s1xx.png
+        |-- 23
+            |-- 1752000786_20250702_2252_Value Loyalty and Protection_simple_compose_01jz646k8nf8189n42t9jhkb41.png
+        |-- 25
+            |-- 1752001467_20250621_0145_Destined Path Wisdom_simple_compose_01jy7hbwd4e4cssjred3f9eszs.png
+        |-- 26
+            |-- 1752001556_20250701_2314_Truth Always Prevails_simple_compose_01jz3k28v3famvypf758dx5pjt.png
+        |-- 3
+            |-- 1751054103_685ef7173e97a.png
+            |-- 1751397033_686432a9f3b33.png
+            |-- 1751397034_686432aa0c4b4.png
+            |-- 1751397034_686432aa11288.png
+            |-- 1751397034_686432aa214a8.png
+            |-- 1751397034_686432aa2b742.png
+            |-- 1751397034_686432aa2fc37.png
+    |-- hot
     |-- index.php
     |-- kyc_documents
         |-- 1740517316_Adobe Illustrator Script - Brief .docx
         |-- 1740517372_Cv.1 (1) (1) (1).pdf
+        |-- 1750868638_Sohaib May Attendance and Payslip.xlsx
+        |-- 1750868705_Evaluation for Jr developer.pdf
+        |-- 1750868705_Sohaib May Attendance and Payslip.xlsx
+        |-- 1750873038_juneteenth-offer-updated.webp
+        |-- 1750874014_20250621_0145_Destined Path Wisdom_simple_compose_01jy7hbwd4e4cssjred3f9eszs.png
+        |-- 1750874014_juneteenth-offer-updated.webp
+        |-- 1750874350_ChatGPT Image Jun 24, 2025, 02_35_47 AM.png
+        |-- 1750874350_juneteenth-offer-updated.webp
+        |-- 1750874473_20250624_2130_Heartbreak for Salvation_simple_compose_01jyhccw3nfg0trphr99hwefsj.png
+        |-- 1750875791_home-summary-7-days.pdf
+        |-- 1750876150_ChatGPT Image Jun 24, 2025, 02_35_47 AM.png
+        |-- 1750876181_ChatGPT Image Jun 24, 2025, 02_35_47 AM.png
+        |-- 1750876198_ChatGPT Image Jun 24, 2025, 02_35_47 AM.png
+        |-- 1750876246_ChatGPT Image Jun 24, 2025, 02_35_47 AM.png
+        |-- 1750876246_Screenshot 2025-06-05 004140.png
+        |-- 1750876293_20250624_2130_Heartbreak for Salvation_simple_compose_01jyhccw3nfg0trphr99hwefsj.png
+        |-- 1750876293_ChatGPT Image Jun 24, 2025, 02_35_47 AM.png
+        |-- 1750876293_Screenshot 2025-06-05 004140.png
+        |-- 1750876639_screencapture-login-dotgix-slnewproject-2025-05-22-02_14_48.png
+        |-- 1750883952_20250624_2130_Heartbreak for Salvation_simple_compose_01jyhccw3nfg0trphr99hwefsj.png
     |-- robots.txt
 |-- README.md
 |-- resources
@@ -102,6 +157,8 @@
         |-- app.tsx
         |-- bootstrap.ts
         |-- Components
+            |-- Application
+                |-- LocationSearchFilter.tsx
             |-- ApplicationLogo.tsx
             |-- Checkbox.tsx
             |-- DangerButton.tsx
@@ -112,22 +169,48 @@
             |-- NavLink.tsx
             |-- PrimaryButton.tsx
             |-- ResponsiveNavLink.tsx
+            |-- Restaurant
+                |-- CreateTenant.tsx
+                |-- Dropdown.tsx
+                |-- FormSelect.tsx
+                |-- Gallery.tsx
+                |-- InputError.tsx
+                |-- InputLabel.tsx
+                |-- InputLocation.tsx
+                |-- KycUpdateForm.tsx
+                |-- NavLink.tsx
+                |-- SubmitButton.tsx
+                |-- Table.tsx
+                |-- TextInput.tsx
             |-- SecondaryButton.tsx
             |-- SuperAdmin
+                |-- Checkbox.tsx
+                |-- DangerButton.tsx
                 |-- Dropdown.tsx
                 |-- FormSelect.tsx
                 |-- InputError.tsx
                 |-- InputLabel.tsx
                 |-- InputLocation.tsx
+                |-- Modal.tsx
                 |-- NavLink.tsx
+                |-- PrimaryButton.tsx
+                |-- ResponsiveNavLink.tsx
+                |-- SecondaryButton.tsx
                 |-- SubmitButton.tsx
                 |-- Table.tsx
+                |-- TextAreaInput.tsx
                 |-- TextInput.tsx
             |-- TextInput.tsx
+        |-- echo.ts
         |-- Layouts
+            |-- AppWrapper.tsx
             |-- AuthenticatedLayout.tsx
+            |-- ClientLayout.tsx
             |-- GuestLayout.tsx
+            |-- RestaurantLayout.tsx
+            |-- SuperAdminLayout copy 3.tsx
             |-- SuperAdminLayout.tsx
+            |-- SuperConsultantLayout.tsx
         |-- Pages
             |-- AppWrapper.ts
             |-- Auth
@@ -140,6 +223,7 @@
             |-- Client
                 |-- Auth
                     |-- Login.tsx
+                |-- Dashboard.tsx
             |-- Dashboard.tsx
             |-- Profile
                 |-- Edit.tsx
@@ -150,6 +234,8 @@
             |-- Restaurant
                 |-- Auth
                     |-- Login.tsx
+                |-- Dashboard.tsx
+                |-- RestaurantShow.tsx
             |-- SuperAdmin
                 |-- Auth
                     |-- Login.tsx
@@ -162,6 +248,8 @@
                     |-- create.tsx
                     |-- index.tsx
                     |-- requests.tsx
+                |-- Themes
+                    |-- Create.tsx
                 |-- Users
                     |-- Create.tsx
                     |-- Index.tsx
@@ -171,8 +259,13 @@
                     |-- Login.tsx
             |-- Welcome.tsx
         |-- types
+            |-- domains.ts
+            |-- gallery.ts
             |-- global.d.ts
             |-- index.d.ts
+            |-- kyc_documents.ts
+            |-- restarurant.ts
+            |-- tenant.ts
             |-- vite-env.d.ts
     |-- views
         |-- app.blade.php
@@ -201,6 +294,7 @@
 |-- restorant-saas.docx
 |-- routes
     |-- auth.php
+    |-- channels.php
     |-- console.php
     |-- tenant.php
     |-- web.php
@@ -227,13 +321,21 @@
             |-- .gitignore
             |-- 02b0f2ace12ed12148bf824cd1a6ee40.php
             |-- 042a76eb68d5be1b465bd51ff0845a8a.php
+            |-- 0c8f7d61112d76424120c3d9f5bf7657.php
+            |-- 0d85478112e3e7ce6511f119eb3affd8.php
             |-- 0f12644b8f8a23c5e747fe47d8eca86e.php
             |-- 1e3b95e0dc49ab0e3af7f65db37a74f1.php
+            |-- 1e61304f989161c067719c2b0d3d7b22.php
             |-- 21b1c93237905603a9d1a2cc0035d4f8.php
             |-- 227e095fe204fc00a1a8549187be1ab4.php
             |-- 2283faa7ad57fb51c887a2c7818e3173.php
+            |-- 2509fe6c403ce087d7b6812303d4ac9e.php
+            |-- 252d883eb08f160c1b581077ffc3e476.php
             |-- 2c89218e3396a9469d59fe5a78fa144e.php
             |-- 2f71ad207d220d99937a299735b0b9e6.php
+            |-- 39bc4563aac97551f0b38ad7a875ad4b.php
+            |-- 46001841d0b74be6d6713e36f7c26fa3.php
+            |-- 4a462fe5c46171c183d4b5ab53a6dbb4.php
             |-- 4c853212cafe5fd21eda24e0bb00761d.php
             |-- 56eb08553180f5a7030991da7e12751e.php
             |-- 5dbc4d3530f5937eb5123a9430142473.php
@@ -242,13 +344,19 @@
             |-- 64f3526cfc73d924fce61b63c19d0d7d.php
             |-- 6a0eec93a7ebe9c155bfcfb18b45f7c2.php
             |-- 6e13f6b815e4d901495be66957702da1.php
+            |-- 702a389f93d4160d697c21ee3ba3005c.php
+            |-- 72ac76d9b1e6adb6230f368c96b7202b.php
             |-- 94cdd53e14c130f41f4b5093f4a50786.php
+            |-- 9f4dd7a02c5be1797b6a68b2de96be23.php
             |-- ac5485986f48af999ea67d6289b2bb5a.php
             |-- b449ebea56185e18ac521db8960326ca.php
             |-- ba63e2f7c5a12d48f13aa066ba8af221.php
             |-- c07b58dde0c19cf427be94c6c0dc614b.php
+            |-- c684e1edbdc187fb03cac182161b6f18.php
             |-- cb8c3b3e50811bcc015d6a163bd66e97.php
             |-- cffadfd1d53fb1a70ebda369a6c93b40.php
+            |-- d5565e9d79d5dab01fbe6e27ce05c6f3.php
+            |-- e22a73044e34757dedb5079e94bba75a.php
             |-- e4424345a2b1f81a5149dfca3dcb8dd4.php
             |-- e4a40cd0930e5b6b9b641a502a2aee08.php
             |-- e75314fa341bc95086785b88f403b8d3.php
@@ -372,6 +480,90 @@
                         |-- DateTimeDefaultPrecision.php
                         |-- DateTimeImmutableType.php
                         |-- DateTimeType.php
+    |-- clue
+        |-- redis-protocol
+            |-- .gitattributes
+            |-- .github
+                |-- FUNDING.yml
+                |-- workflows
+                    |-- ci.yml
+            |-- .gitignore
+            |-- CHANGELOG.md
+            |-- composer.json
+            |-- examples
+                |-- client.php
+                |-- perf.php
+            |-- LICENSE
+            |-- phpunit.xml.dist
+            |-- phpunit.xml.legacy
+            |-- README.md
+            |-- src
+                |-- Factory.php
+                |-- Model
+                    |-- BulkReply.php
+                    |-- ErrorReply.php
+                    |-- IntegerReply.php
+                    |-- ModelInterface.php
+                    |-- MultiBulkReply.php
+                    |-- Request.php
+                    |-- StatusReply.php
+                |-- Parser
+                    |-- MessageBuffer.php
+                    |-- ParserException.php
+                    |-- ParserInterface.php
+                    |-- RequestParser.php
+                    |-- ResponseParser.php
+                |-- Serializer
+                    |-- RecursiveSerializer.php
+                    |-- SerializerInterface.php
+            |-- tests
+                |-- FactoryTest.php
+                |-- Model
+                    |-- AbstractModelTest.php
+                    |-- BulkReplyTest.php
+                    |-- ErrorReplyTest.php
+                    |-- IntegerReplyTest.php
+                    |-- MultiBulkReplyTest.php
+                    |-- RequestTest.php
+                    |-- StatusReplyTest.php
+                |-- Parser
+                    |-- AbstractParserTest.php
+                    |-- RequestParserTest.php
+                    |-- ResponseParserTest.php
+                |-- Serializer
+                    |-- AbstractSerializerTest.php
+                    |-- RecursiveSerializerTest.php
+                |-- TestCase.php
+        |-- redis-react
+            |-- .gitattributes
+            |-- .github
+                |-- FUNDING.yml
+                |-- workflows
+                    |-- ci.yml
+            |-- .gitignore
+            |-- CHANGELOG.md
+            |-- composer.json
+            |-- examples
+                |-- cli.php
+                |-- incr.php
+                |-- publish.php
+                |-- subscribe.php
+            |-- LICENSE
+            |-- phpunit.xml.dist
+            |-- phpunit.xml.legacy
+            |-- README.md
+            |-- src
+                |-- Client.php
+                |-- Factory.php
+                |-- LazyClient.php
+                |-- StreamingClient.php
+            |-- tests
+                |-- FactoryLazyClientTest.php
+                |-- FactoryStreamingClientTest.php
+                |-- FunctionalTest.php
+                |-- LazyClientTest.php
+                |-- StreamingClientTest.php
+                |-- TestCase.php
     |-- composer
         |-- autoload_classmap.php
         |-- autoload_files.php
@@ -593,6 +785,36 @@
                     |-- QuotedString.php
                     |-- TLD.php
                     |-- Warning.php
+    |-- evenement
+        |-- evenement
+            |-- .gitattributes
+            |-- .github
+                |-- workflows
+                    |-- ci.yaml
+            |-- .gitignore
+            |-- CHANGELOG.md
+            |-- composer.json
+            |-- doc
+                |-- 00-intro.md
+                |-- 01-api.md
+                |-- 02-plugin-system.md
+            |-- examples
+                |-- benchmark-emit-no-arguments.php
+                |-- benchmark-emit-once.php
+                |-- benchmark-emit-one-argument.php
+                |-- benchmark-emit.php
+                |-- benchmark-remove-listener-once.php
+            |-- LICENSE
+            |-- phpunit.xml.dist
+            |-- README.md
+            |-- src
+                |-- EventEmitter.php
+                |-- EventEmitterInterface.php
+                |-- EventEmitterTrait.php
+            |-- tests
+                |-- EventEmitterTest.php
+                |-- functions.php
+                |-- Listener.php
     |-- facade
         |-- ignition-contracts
             |-- .github
@@ -4062,6 +4284,220 @@
                         |-- TableRenderer.php
                         |-- TextareaPromptRenderer.php
                         |-- TextPromptRenderer.php
+        |-- reverb
+            |-- .editorconfig
+            |-- .gitattributes
+            |-- .github
+                |-- CODE_OF_CONDUCT.md
+                |-- CONTRIBUTING.md
+                |-- ISSUE_TEMPLATE
+                    |-- 1_Bug_report.yml
+                    |-- config.yml
+                |-- PULL_REQUEST_TEMPLATE.md
+                |-- SECURITY.md
+                |-- SUPPORT.md
+                |-- workflows
+                    |-- coding-standards.yml
+                    |-- issues.yml
+                    |-- pull-requests.yml
+                    |-- spec-tests.yml
+                    |-- static-analysis.yml
+                    |-- tests.yml
+                    |-- update-changelog.yml
+            |-- .gitignore
+            |-- art
+                |-- logo.svg
+            |-- CHANGELOG.md
+            |-- composer.json
+            |-- config
+                |-- reverb.php
+            |-- LICENSE.md
+            |-- phpstan.neon.dist
+            |-- phpunit.xml.dist
+            |-- README.md
+            |-- resources
+                |-- views
+                    |-- components
+                        |-- icons
+                            |-- reverb.blade.php
+                    |-- livewire
+                        |-- connections.blade.php
+                        |-- messages.blade.php
+            |-- src
+                |-- Application.php
+                |-- ApplicationManager.php
+                |-- ApplicationManagerServiceProvider.php
+                |-- Certificate.php
+                |-- Concerns
+                    |-- GeneratesIdentifiers.php
+                    |-- InteractsWithApplications.php
+                    |-- SerializesConnections.php
+                |-- ConfigApplicationProvider.php
+                |-- Connection.php
+                |-- Console
+                    |-- Commands
+                        |-- InstallCommand.php
+                    |-- Components
+                        |-- Message.php
+                        |-- views
+                            |-- message.php
+                |-- Contracts
+                    |-- ApplicationProvider.php
+                    |-- Connection.php
+                    |-- Logger.php
+                    |-- ServerProvider.php
+                    |-- WebSocketConnection.php
+                |-- Events
+                    |-- ChannelCreated.php
+                    |-- ChannelRemoved.php
+                    |-- ConnectionPruned.php
+                    |-- MessageReceived.php
+                    |-- MessageSent.php
+                |-- Exceptions
+                    |-- InvalidApplication.php
+                    |-- InvalidOrigin.php
+                |-- Jobs
+                    |-- PingInactiveConnections.php
+                    |-- PruneStaleConnections.php
+                |-- Loggers
+                    |-- CliLogger.php
+                    |-- Log.php
+                    |-- NullLogger.php
+                    |-- StandardLogger.php
+                |-- Protocols
+                    |-- Pusher
+                        |-- Channels
+                            |-- CacheChannel.php
+                            |-- Channel.php
+                            |-- ChannelBroker.php
+                            |-- ChannelConnection.php
+                            |-- Concerns
+                                |-- InteractsWithPresenceChannels.php
+                                |-- InteractsWithPrivateChannels.php
+                            |-- PresenceCacheChannel.php
+                            |-- PresenceChannel.php
+                            |-- PrivateCacheChannel.php
+                            |-- PrivateChannel.php
+                        |-- ClientEvent.php
+                        |-- Concerns
+                            |-- InteractsWithChannelInformation.php
+                            |-- SerializesChannels.php
+                        |-- Contracts
+                            |-- ChannelConnectionManager.php
+                            |-- ChannelManager.php
+                        |-- EventDispatcher.php
+                        |-- EventHandler.php
+                        |-- Exceptions
+                            |-- ConnectionUnauthorized.php
+                            |-- InvalidOrigin.php
+                            |-- PusherException.php
+                        |-- Http
+                            |-- Controllers
+                                |-- ChannelController.php
+                                |-- ChannelsController.php
+                                |-- ChannelUsersController.php
+                                |-- ConnectionsController.php
+                                |-- Controller.php
+                                |-- EventsBatchController.php
+                                |-- EventsController.php
+                                |-- HealthCheckController.php
+                                |-- PusherController.php
+                                |-- UsersTerminateController.php
+                        |-- Managers
+                            |-- ArrayChannelConnectionManager.php
+                            |-- ArrayChannelManager.php
+                        |-- MetricsHandler.php
+                        |-- PusherPubSubIncomingMessageHandler.php
+                        |-- Server.php
+                |-- Pulse
+                    |-- Livewire
+                        |-- Concerns
+                            |-- HasRate.php
+                        |-- Connections.php
+                        |-- Messages.php
+                    |-- Recorders
+                        |-- ReverbConnections.php
+                        |-- ReverbMessages.php
+                |-- ReverbServiceProvider.php
+                |-- ServerProviderManager.php
+                |-- Servers
+                    |-- Reverb
+                        |-- Concerns
+                            |-- ClosesConnections.php
+                        |-- Connection.php
+                        |-- Console
+                            |-- Commands
+                                |-- RestartServer.php
+                                |-- StartServer.php
+                        |-- Contracts
+                            |-- PubSubIncomingMessageHandler.php
+                            |-- PubSubProvider.php
+                        |-- Factory.php
+                        |-- Http
+                            |-- Connection.php
+                            |-- Request.php
+                            |-- Response.php
+                            |-- Route.php
+                            |-- Router.php
+                            |-- Server.php
+                        |-- Publishing
+                            |-- RedisClientFactory.php
+                            |-- RedisPubSubProvider.php
+                        |-- RedisClientFactory.php
+                        |-- ReverbServerProvider.php
+            |-- tests
+                |-- FakeApplicationProvider.php
+                |-- FakeConnection.php
+                |-- Feature
+                    |-- Protocols
+                        |-- Pusher
+                            |-- Reverb
+                                |-- ChannelControllerTest.php
+                                |-- ChannelsControllerTest.php
+                                |-- ChannelUsersControllerTest.php
+                                |-- ConnectionsControllerTest.php
+                                |-- EventsBatchControllerTest.php
+                                |-- EventsControllerTest.php
+                                |-- HealthCheckControllerTest.php
+                                |-- ServerTest.php
+                                |-- UsersTerminateControllerTest.php
+                |-- Helpers
+                    |-- Reverb.php
+                |-- Pest.php
+                |-- ReverbTestCase.php
+                |-- Specification
+                    |-- client-spec.json
+                    |-- spec-analyze.php
+                    |-- spec-server.php
+                |-- TestCase.php
+                |-- TestConnection.php
+                |-- Unit
+                    |-- EventTest.php
+                    |-- Jobs
+                        |-- PingInactiveConnectionsTest.php
+                        |-- PruneStaleConnectionsTest.php
+                    |-- Protocols
+                        |-- Pusher
+                            |-- Channels
+                                |-- CacheChannelTest.php
+                                |-- ChannelBrokerTest.php
+                                |-- ChannelTest.php
+                                |-- PresenceCacheChannelTest.php
+                                |-- PresenceChannelTest.php
+                                |-- PrivateCacheChannelTest.php
+                                |-- PrivateChannelTest.php
+                            |-- ClientEventTest.php
+                            |-- EventTest.php
+                            |-- Managers
+                                |-- ChannelManagerTest.php
+                            |-- ServerTest.php
+                    |-- ProviderTest.php
+                    |-- Servers
+                        |-- Reverb
+                            |-- FactoryTest.php
+                            |-- Publishing
+                                |-- RedisPubSubProviderTest.php
+            |-- UPGRADE.md
         |-- sail
             |-- bin
                 |-- sail
@@ -6481,11 +6917,108 @@
                     |-- Node.php
                     |-- Style.php
                     |-- Styles.php
+    |-- paragonie
+        |-- sodium_compat
+            |-- autoload.php
+            |-- composer.json
+            |-- lib
+                |-- namespaced.php
+                |-- php72compat.php
+                |-- php72compat_const.php
+                |-- php84compat.php
+                |-- php84compat_const.php
+                |-- ristretto255.php
+                |-- stream-xchacha20.php
+            |-- LICENSE
+            |-- namespaced
+                |-- Compat.php
+                |-- Core
+                    |-- BLAKE2b.php
+                    |-- ChaCha20
+                        |-- Ctx.php
+                        |-- IetfCtx.php
+                    |-- ChaCha20.php
+                    |-- Curve25519
+                        |-- Fe.php
+                        |-- Ge
+                            |-- Cached.php
+                            |-- P1p1.php
+                            |-- P2.php
+                            |-- P3.php
+                            |-- Precomp.php
+                        |-- H.php
+                    |-- Curve25519.php
+                    |-- Ed25519.php
+                    |-- HChaCha20.php
+                    |-- HSalsa20.php
+                    |-- Poly1305
+                        |-- State.php
+                    |-- Poly1305.php
+                    |-- Salsa20.php
+                    |-- SipHash.php
+                    |-- Util.php
+                    |-- X25519.php
+                    |-- XChaCha20.php
+                    |-- Xsalsa20.php
+                |-- Crypto.php
+                |-- File.php
+            |-- README.md
+            |-- src
+                |-- Compat.php
+                |-- Core
+                    |-- AEGIS
+                        |-- State128L.php
+                        |-- State256.php
+                    |-- AEGIS128L.php
+                    |-- AEGIS256.php
+                    |-- AES
+                        |-- Block.php
+                        |-- Expanded.php
+                        |-- KeySchedule.php
+                    |-- AES.php
+                    |-- Base64
+                        |-- Original.php
+                        |-- UrlSafe.php
+                    |-- BLAKE2b.php
+                    |-- ChaCha20
+                        |-- Ctx.php
+                        |-- IetfCtx.php
+                    |-- ChaCha20.php
+                    |-- Curve25519
+                        |-- Fe.php
+                        |-- Ge
+                            |-- Cached.php
+                            |-- P1p1.php
+                            |-- P2.php
+                            |-- P3.php
+                            |-- Precomp.php
+                        |-- H.php
+                        |-- README.md
+                    |-- Curve25519.php
+                    |-- Ed25519.php
+                    |-- HChaCha20.php
+                    |-- HSalsa20.php
+                    |-- Poly1305
+                        |-- State.php
+                    |-- Poly1305.php
+                    |-- Ristretto255.php
+                    |-- Salsa20.php
+                    |-- SecretStream
+                        |-- State.php
+                    |-- SipHash.php
+                    |-- Util.php
+                    |-- X25519.php
+                    |-- XChaCha20.php
+                    |-- XSalsa20.php
+                |-- Crypto.php
+                |-- File.php
+                |-- SodiumException.php
     |-- pest-plugins.json
     |-- pestphp
         |-- pest
             |-- .temp
                 |-- .gitkeep
+                |-- test-results
             |-- bin
                 |-- pest
                 |-- worker.php
@@ -6852,6 +7385,7 @@
         |-- pest-plugin-mutate
             |-- .temp
                 |-- mutations
+                |-- pest-mutate-cache
             |-- composer.json
             |-- LICENSE.md
             |-- pint.json
@@ -9158,6 +9692,18 @@
                     |-- IntervalChecker.php
                     |-- NoopChecker.php
                     |-- SelfUpdate.php
+    |-- pusher
+        |-- pusher-php-server
+            |-- CHANGELOG.md
+            |-- composer.json
+            |-- src
+                |-- ApiErrorException.php
+                |-- Pusher.php
+                |-- PusherCrypto.php
+                |-- PusherException.php
+                |-- PusherInstance.php
+                |-- PusherInterface.php
+                |-- Webhook.php
     |-- ralouphie
         |-- getallheaders
             |-- composer.json
@@ -9343,6 +9889,452 @@
                 |-- Validator
                     |-- GenericValidator.php
                     |-- ValidatorInterface.php
+    |-- ratchet
+        |-- rfc6455
+            |-- .github
+                |-- workflows
+                    |-- ci.yml
+            |-- .gitignore
+            |-- composer.json
+            |-- LICENSE
+            |-- phpunit.xml.dist
+            |-- README.md
+            |-- src
+                |-- Handshake
+                    |-- ClientNegotiator.php
+                    |-- InvalidPermessageDeflateOptionsException.php
+                    |-- NegotiatorInterface.php
+                    |-- PermessageDeflateOptions.php
+                    |-- RequestVerifier.php
+                    |-- ResponseVerifier.php
+                    |-- ServerNegotiator.php
+                |-- Messaging
+                    |-- CloseFrameChecker.php
+                    |-- DataInterface.php
+                    |-- Frame.php
+                    |-- FrameInterface.php
+                    |-- Message.php
+                    |-- MessageBuffer.php
+                    |-- MessageInterface.php
+            |-- tests
+                |-- ab
+                    |-- clientRunner.php
+                    |-- docker_bootstrap.sh
+                    |-- fuzzingclient.json
+                    |-- fuzzingclient_skip_deflate.json
+                    |-- fuzzingserver.json
+                    |-- fuzzingserver_skip_deflate.json
+                    |-- run_ab_tests.sh
+                    |-- startServer.php
+                |-- AbResultsTest.php
+                |-- bootstrap.php
+                |-- unit
+                    |-- Handshake
+                        |-- PermessageDeflateOptionsTest.php
+                        |-- RequestVerifierTest.php
+                        |-- ResponseVerifierTest.php
+                        |-- ServerNegotiatorTest.php
+                    |-- Messaging
+                        |-- FrameTest.php
+                        |-- MessageBufferTest.php
+                        |-- MessageTest.php
+    |-- react
+        |-- dns
+            |-- .gitattributes
+            |-- .github
+                |-- workflows
+                    |-- ci.yml
+            |-- .gitignore
+            |-- CHANGELOG.md
+            |-- composer.json
+            |-- examples
+                |-- 01-one.php
+                |-- 02-concurrent.php
+                |-- 03-cached.php
+                |-- 11-all-ips.php
+                |-- 12-all-types.php
+                |-- 13-reverse-dns.php
+                |-- 91-query-a-and-aaaa.php
+                |-- 92-query-any.php
+            |-- LICENSE
+            |-- phpunit.xml.dist
+            |-- phpunit.xml.legacy
+            |-- README.md
+            |-- src
+                |-- BadServerException.php
+                |-- Config
+                    |-- Config.php
+                    |-- HostsFile.php
+                |-- Model
+                    |-- Message.php
+                    |-- Record.php
+                |-- Protocol
+                    |-- BinaryDumper.php
+                    |-- Parser.php
+                |-- Query
+                    |-- CachingExecutor.php
+                    |-- CancellationException.php
+                    |-- CoopExecutor.php
+                    |-- ExecutorInterface.php
+                    |-- FallbackExecutor.php
+                    |-- HostsFileExecutor.php
+                    |-- Query.php
+                    |-- RetryExecutor.php
+                    |-- SelectiveTransportExecutor.php
+                    |-- TcpTransportExecutor.php
+                    |-- TimeoutException.php
+                    |-- TimeoutExecutor.php
+                    |-- UdpTransportExecutor.php
+                |-- RecordNotFoundException.php
+                |-- Resolver
+                    |-- Factory.php
+                    |-- Resolver.php
+                    |-- ResolverInterface.php
+            |-- tests
+                |-- Config
+                    |-- ConfigTest.php
+                    |-- HostsFileTest.php
+                |-- Fixtures
+                    |-- etc
+                        |-- resolv.conf
+                |-- FunctionalResolverTest.php
+                |-- Model
+                    |-- MessageTest.php
+                |-- Protocol
+                    |-- BinaryDumperTest.php
+                    |-- ParserTest.php
+                |-- Query
+                    |-- CachingExecutorTest.php
+                    |-- CoopExecutorTest.php
+                    |-- FallbackExecutorTest.php
+                    |-- HostsFileExecutorTest.php
+                    |-- QueryTest.php
+                    |-- RetryExecutorTest.php
+                    |-- SelectiveTransportExecutorTest.php
+                    |-- TcpTransportExecutorTest.php
+                    |-- TimeoutExecutorTest.php
+                    |-- UdpTransportExecutorTest.php
+                |-- Resolver
+                    |-- FactoryTest.php
+                    |-- ResolveAliasesTest.php
+                    |-- ResolverTest.php
+                |-- TestCase.php
+        |-- event-loop
+            |-- .gitattributes
+            |-- .github
+                |-- workflows
+                    |-- ci.yml
+            |-- .gitignore
+            |-- CHANGELOG.md
+            |-- composer.json
+            |-- examples
+                |-- 01-timers.php
+                |-- 02-periodic.php
+                |-- 03-ticks.php
+                |-- 04-signals.php
+                |-- 11-consume-stdin.php
+                |-- 12-generate-yes.php
+                |-- 13-http-client-blocking.php
+                |-- 14-http-client-async.php
+                |-- 21-http-server.php
+                |-- 91-benchmark-ticks.php
+                |-- 92-benchmark-timers.php
+                |-- 93-benchmark-ticks-delay.php
+                |-- 94-benchmark-timers-delay.php
+                |-- 95-benchmark-memory.php
+            |-- LICENSE
+            |-- phpunit.xml.dist
+            |-- phpunit.xml.legacy
+            |-- README.md
+            |-- src
+                |-- ExtEventLoop.php
+                |-- ExtEvLoop.php
+                |-- ExtLibeventLoop.php
+                |-- ExtLibevLoop.php
+                |-- ExtUvLoop.php
+                |-- Factory.php
+                |-- Loop.php
+                |-- LoopInterface.php
+                |-- SignalsHandler.php
+                |-- StreamSelectLoop.php
+                |-- Tick
+                    |-- FutureTickQueue.php
+                |-- Timer
+                    |-- Timer.php
+                    |-- Timers.php
+                |-- TimerInterface.php
+            |-- tests
+                |-- AbstractLoopTest.php
+                |-- bin
+                    |-- 01-ticks-loop-class.php
+                    |-- 02-ticks-loop-instance.php
+                    |-- 03-ticks-loop-stop.php
+                    |-- 11-uncaught.php
+                    |-- 12-undefined.php
+                    |-- 21-stop.php
+                    |-- 22-stop-uncaught.php
+                |-- BinTest.php
+                |-- ExtEventLoopTest.php
+                |-- ExtEvLoopTest.php
+                |-- ExtLibeventLoopTest.php
+                |-- ExtLibevLoopTest.php
+                |-- ExtUvLoopTest.php
+                |-- LoopTest.php
+                |-- SignalsHandlerTest.php
+                |-- StreamSelectLoopTest.php
+                |-- TestCase.php
+                |-- Timer
+                    |-- AbstractTimerTest.php
+                    |-- ExtEventTimerTest.php
+                    |-- ExtEvTimerTest.php
+                    |-- ExtLibeventTimerTest.php
+                    |-- ExtLibevTimerTest.php
+                    |-- ExtUvTimerTest.php
+                    |-- StreamSelectTimerTest.php
+                    |-- TimersTest.php
+        |-- promise
+            |-- .gitattributes
+            |-- .github
+                |-- workflows
+                    |-- ci.yml
+            |-- .gitignore
+            |-- CHANGELOG.md
+            |-- composer.json
+            |-- LICENSE
+            |-- phpstan.neon.dist
+            |-- phpunit.xml.dist
+            |-- phpunit.xml.legacy
+            |-- README.md
+            |-- src
+                |-- Deferred.php
+                |-- Exception
+                    |-- CompositeException.php
+                    |-- LengthException.php
+                |-- functions.php
+                |-- functions_include.php
+                |-- Internal
+                    |-- CancellationQueue.php
+                    |-- FulfilledPromise.php
+                    |-- RejectedPromise.php
+                |-- Promise.php
+                |-- PromiseInterface.php
+            |-- tests
+                |-- DeferredTest.php
+                |-- DeferredTestCancelNoopThenRejectShouldNotReportUnhandled.phpt
+                |-- DeferredTestCancelThatRejectsShouldNotReportUnhandled.phpt
+                |-- DeferredTestRejectShouldReportUnhandled.phpt
+                |-- DeferredTestRejectThenCancelShouldNotReportUnhandled.phpt
+                |-- Fiber.php
+                |-- fixtures
+                    |-- CallbackWithDNFTypehintClass.php
+                    |-- CallbackWithIntersectionTypehintClass.php
+                    |-- CallbackWithoutTypehintClass.php
+                    |-- CallbackWithTypehintClass.php
+                    |-- CallbackWithUnionTypehintClass.php
+                    |-- CountableException.php
+                    |-- IterableException.php
+                    |-- SimpleFulfilledTestThenable.php
+                    |-- SimpleTestCancellable.php
+                    |-- SimpleTestCancellableThenable.php
+                |-- FunctionAllTest.php
+                |-- FunctionAllTestRejectedShouldReportUnhandled.phpt
+                |-- FunctionAllTestRejectedThenMatchingThatReturnsShouldNotReportUnhandled.phpt
+                |-- FunctionAnyTest.php
+                |-- FunctionAnyTestRejectedShouldReportUnhandled.phpt
+                |-- FunctionAnyTestRejectedThenMatchingThatReturnsShouldNotReportUnhandled.phpt
+                |-- FunctionCheckTypehintTest.php
+                |-- FunctionRaceTest.php
+                |-- FunctionRaceTestRejectedShouldReportUnhandled.phpt
+                |-- FunctionRaceTestRejectedThenMatchingThatReturnsShouldNotReportUnhandled.phpt
+                |-- FunctionRejectTest.php
+                |-- FunctionRejectTestCancelShouldNotReportUnhandled.phpt
+                |-- FunctionRejectTestCatchMatchingShouldNotReportUnhandled.phpt
+                |-- FunctionRejectTestCatchMismatchShouldReportUnhandled.phpt
+                |-- FunctionRejectTestFinallyThatReturnsShouldReportUnhandled.phpt
+                |-- FunctionRejectTestFinallyThatThrowsNewExceptionShouldReportUnhandledForNewExceptionOnly.phpt
+                |-- FunctionRejectTestShouldReportUnhandled.phpt
+                |-- FunctionRejectTestShouldReportUnhandledWithPreviousExceptions.phpt
+                |-- FunctionRejectTestThenMatchingThatReturnsShouldNotReportUnhandled.phpt
+                |-- FunctionRejectTestThenMatchingThatThrowsNewExceptionShouldReportUnhandledRejectionForNewExceptionOnly.phpt
+                |-- FunctionRejectTestThenMismatchThrowsTypeErrorAndShouldReportUnhandledForTypeErrorOnlyOnPhp7.phpt
+                |-- FunctionRejectTestThenMismatchThrowsTypeErrorAndShouldReportUnhandledForTypeErrorOnlyOnPhp8.phpt
+                |-- FunctionResolveTest.php
+                |-- FunctionResolveTestThenShouldNotReportUnhandled.phpt
+                |-- FunctionSetRejectionHandlerShouldBeInvokedForUnhandled.phpt
+                |-- FunctionSetRejectionHandlerShouldInvokeLastHandlerForUnhandled.phpt
+                |-- FunctionSetRejectionHandlerThatHasUnhandledShouldReportUnhandled.phpt
+                |-- FunctionSetRejectionHandlerThatThrowsShouldTerminateProgramForUnhandled.phpt
+                |-- FunctionSetRejectionHandlerThatThrowsShouldTerminateProgramForUnhandledWithPreviousExceptions.phpt
+                |-- FunctionSetRejectionHandlerThatTriggersDefaultHandlerShouldTerminateProgramForUnhandled.phpt
+                |-- FunctionSetRejectionHandlerThatTriggersErrorHandlerThatThrowsShouldTerminateProgramForUnhandled.phpt
+                |-- FunctionSetRejectionHandlerThatUsesNestedSetRejectionHandlerShouldInvokeInnerHandlerForUnhandled.phpt
+                |-- Internal
+                    |-- CancellationQueueTest.php
+                    |-- FulfilledPromiseTest.php
+                    |-- RejectedPromiseTest.php
+                |-- PHP8.php
+                |-- PromiseAdapter
+                    |-- CallbackPromiseAdapter.php
+                    |-- PromiseAdapterInterface.php
+                |-- PromiseTest
+                    |-- CancelTestTrait.php
+                    |-- FullTestTrait.php
+                    |-- PromiseFulfilledTestTrait.php
+                    |-- PromisePendingTestTrait.php
+                    |-- PromiseRejectedTestTrait.php
+                    |-- PromiseSettledTestTrait.php
+                    |-- RejectTestTrait.php
+                    |-- ResolveTestTrait.php
+                |-- PromiseTest.php
+                |-- PromiseTestCancelThatRejectsAfterwardsShouldNotReportUnhandled.phpt
+                |-- PromiseTestCancelThatRejectsShouldNotReportUnhandled.phpt
+                |-- TestCase.php
+                |-- types
+                    |-- all.php
+                    |-- any.php
+                    |-- deferred.php
+                    |-- promise.php
+                    |-- race.php
+                    |-- reject.php
+                    |-- resolve.php
+        |-- promise-timer
+            |-- .gitattributes
+            |-- .github
+                |-- workflows
+                    |-- ci.yml
+            |-- .gitignore
+            |-- CHANGELOG.md
+            |-- composer.json
+            |-- LICENSE
+            |-- phpunit.xml.dist
+            |-- phpunit.xml.legacy
+            |-- README.md
+            |-- src
+                |-- functions.php
+                |-- functions_include.php
+                |-- TimeoutException.php
+            |-- tests
+                |-- FunctionRejectTest.php
+                |-- FunctionResolveTest.php
+                |-- FunctionSleepTest.php
+                |-- FunctionTimeoutTest.php
+                |-- TestCase.php
+                |-- TimeoutExceptionTest.php
+        |-- socket
+            |-- .gitattributes
+            |-- .github
+                |-- workflows
+                    |-- ci.yml
+            |-- .gitignore
+            |-- CHANGELOG.md
+            |-- composer.json
+            |-- examples
+                |-- 01-echo-server.php
+                |-- 02-chat-server.php
+                |-- 03-http-server.php
+                |-- 11-http-client.php
+                |-- 12-https-client.php
+                |-- 21-netcat-client.php
+                |-- 22-http-client.php
+                |-- 91-benchmark-server.php
+                |-- 99-generate-self-signed.php
+                |-- localhost.pem
+                |-- localhost_swordfish.pem
+            |-- LICENSE
+            |-- phpunit.xml.dist
+            |-- phpunit.xml.legacy
+            |-- README.md
+            |-- src
+                |-- Connection.php
+                |-- ConnectionInterface.php
+                |-- Connector.php
+                |-- ConnectorInterface.php
+                |-- DnsConnector.php
+                |-- FdServer.php
+                |-- FixedUriConnector.php
+                |-- HappyEyeBallsConnectionBuilder.php
+                |-- HappyEyeBallsConnector.php
+                |-- LimitingServer.php
+                |-- SecureConnector.php
+                |-- SecureServer.php
+                |-- Server.php
+                |-- ServerInterface.php
+                |-- SocketServer.php
+                |-- StreamEncryption.php
+                |-- TcpConnector.php
+                |-- TcpServer.php
+                |-- TimeoutConnector.php
+                |-- UnixConnector.php
+                |-- UnixServer.php
+            |-- tests
+                |-- ConnectionTest.php
+                |-- ConnectorTest.php
+                |-- DnsConnectorTest.php
+                |-- FdServerTest.php
+                |-- FixedUriConnectorTest.php
+                |-- FunctionalConnectorTest.php
+                |-- FunctionalSecureServerTest.php
+                |-- FunctionalTcpServerTest.php
+                |-- HappyEyeBallsConnectionBuilderTest.php
+                |-- HappyEyeBallsConnectorTest.php
+                |-- IntegrationTest.php
+                |-- LimitingServerTest.php
+                |-- SecureConnectorTest.php
+                |-- SecureIntegrationTest.php
+                |-- SecureServerTest.php
+                |-- ServerTest.php
+                |-- SocketServerTest.php
+                |-- Stub
+                    |-- CallableStub.php
+                    |-- ConnectionStub.php
+                    |-- ServerStub.php
+                |-- TcpConnectorTest.php
+                |-- TcpServerTest.php
+                |-- TestCase.php
+                |-- TimeoutConnectorTest.php
+                |-- TimerSpeedUpEventLoop.php
+                |-- UnixConnectorTest.php
+                |-- UnixServerTest.php
+        |-- stream
+            |-- .gitattributes
+            |-- .github
+                |-- workflows
+                    |-- ci.yml
+            |-- .gitignore
+            |-- CHANGELOG.md
+            |-- composer.json
+            |-- examples
+                |-- 01-http.php
+                |-- 02-https.php
+                |-- 11-cat.php
+                |-- 91-benchmark-throughput.php
+            |-- LICENSE
+            |-- phpunit.xml.dist
+            |-- phpunit.xml.legacy
+            |-- README.md
+            |-- src
+                |-- CompositeStream.php
+                |-- DuplexResourceStream.php
+                |-- DuplexStreamInterface.php
+                |-- ReadableResourceStream.php
+                |-- ReadableStreamInterface.php
+                |-- ThroughStream.php
+                |-- Util.php
+                |-- WritableResourceStream.php
+                |-- WritableStreamInterface.php
+            |-- tests
+                |-- CompositeStreamTest.php
+                |-- DuplexResourceStreamIntegrationTest.php
+                |-- DuplexResourceStreamTest.php
+                |-- EnforceBlockingWrapper.php
+                |-- FunctionalInternetTest.php
+                |-- ReadableResourceStreamTest.php
+                |-- Stub
+                    |-- ReadableStreamStub.php
+                |-- TestCase.php
+                |-- ThroughStreamTest.php
+                |-- UtilTest.php
+                |-- WritableResourceStreamTest.php
     |-- sebastian
         |-- cli-parser
             |-- ChangeLog.md
@@ -11558,3 +12550,4 @@
                 |-- InvalidArgumentException.php
                 |-- Mixin.php
 |-- vite.config.js
+|-- ~$storant-saas.docx

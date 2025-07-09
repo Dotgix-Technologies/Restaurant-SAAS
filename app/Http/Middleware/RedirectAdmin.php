@@ -35,7 +35,7 @@ class RedirectAdmin
 
             if (!$request->is('Restaurant/*')) {
 
-                return redirect()->route('Restaurant.dashboard');
+                return redirect()->route('restaurant.dashboard');
             }
         }
         if (Auth::guard($guard)->check() && Auth::user()->role == 'SuperConsultant') {

@@ -6,7 +6,7 @@ import withReactContent from 'sweetalert2-react-content'
 const MySwal = withReactContent(Swal)
 interface NestedColumn {
     key: string;
-    label: string;
+    label: string | React.ReactNode;
     type: "text" | "image" | "link" | "file" | "status" | "date" | "action" | "putaction";
     actions?: { label: string; route: string; class: string }[];
     putactions?: { options: { label: string; value: string }[]; route: string; class?: string };
@@ -64,9 +64,6 @@ const Table: React.FC<TableProps> = ({ title = "Table", headcustomaction = "", c
                             ))}
                         </tr>
                     </thead>
-
-
-
                     {/* Table Body */}
                     <tbody>
                         {data.map((row, rowIndex) => (
@@ -97,7 +94,7 @@ const renderCellContent = (col: Column, row: Record<string, any>) => {
 
         case "image":
             return value ? (
-                <img src={value} alt="Profile" className="w-10 h-10 rounded-full object-cover" />
+                <img src={`/${value}`} alt="Profile" className="w-10 max-h-20 max-w-20 h-10 rounded-full object-cover" />
             ) : (
                 <span className="text-gray-400">No Image</span>
             );
@@ -154,7 +151,7 @@ const renderCellContent = (col: Column, row: Record<string, any>) => {
                     <div className="ml-4 scrollbar-thin border-gray-300 pl-2 max-h-20 overflow-y-auto">
                         {nestedData.map((nestedRow, index) => (
                             <div key={index} className="mb-1 border-t-2 border-b-2">
-                                {col.nestedColumns.map((nestedCol) => (
+                                {col.nestedColumns?.map((nestedCol) => (
                                     <div key={nestedCol.key}>
                                         <strong>{nestedCol.label}:</strong> {nestedCellContent(nestedCol, nestedRow)}
                                     </div>
@@ -166,7 +163,7 @@ const renderCellContent = (col: Column, row: Record<string, any>) => {
             } else if (typeof nestedData === "object") {
                 return (
                     <div className="ml-4 scrollbar-thin border-gray-300 pl-2 max-h-20 overflow-y-auto">
-                        {col.nestedColumns.map((nestedCol) => (
+                        {col.nestedColumns?.map((nestedCol) => (
                             <div key={nestedCol.key}>
                                 <strong>{nestedCol.label}:</strong> {nestedCellContent(nestedCol, nestedData)}
                             </div>
@@ -176,8 +173,6 @@ const renderCellContent = (col: Column, row: Record<string, any>) => {
             } else {
                 return <span className="text-gray-400">Invalid Data</span>;
             }
-
-
         case "putaction":
             return col.putactions ? (
                 <select
@@ -208,7 +203,7 @@ const nestedCellContent = (col: NestedColumn, row: Record<string, any>) => {
 
         case "image":
             return value ? (
-                <img src={value} alt="Profile" className="w-10 h-10 rounded-full object-cover" />
+                <img src={`/${value}`} alt="Profile" className="w-10  max-h-20 max-w-20 h-10 rounded-full object-cover" />
             ) : (
                 <span className="text-gray-400">No Image</span>
             );
@@ -282,16 +277,21 @@ const nestedCellContent = (col: NestedColumn, row: Record<string, any>) => {
 const handlePutAction = async (event: React.ChangeEvent<HTMLSelectElement>, route: string, id: number) => {
     const selectedValue = event.target.value;
     event.preventDefault();
-
     try {
         // const result = await axios.put(`${route}/${id}`, { value: selectedValue });
 
         router.put(`${route}/${id}`, { value: selectedValue }, {
-            onSuccess: () => {
+            onSuccess: (success) => {
+                let successMessage = "Status updated successfully!";
+                if (typeof success === "object" && success !== null) {
+                    successMessage = Object.values(success).flat().join("\n");
+                } else if (typeof success === "string") {
+                    successMessage = success;
+                }
                 Swal.fire({
                     toast: true,
                     title: "Success!",
-                    text: "Status updated successfully!",
+                    text: successMessage,
                     icon: "success",
                     position: "top-end",
                     timer: 3000,

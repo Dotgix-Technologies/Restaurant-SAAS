@@ -22,7 +22,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'status',
+        'email_verified_at'
     ];
 
     /**
@@ -47,13 +49,16 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
-    public function Tenants(){
+    public function Tenants()
+    {
         return $this->hasMany(Tenant::class);
     }
-    public function restaurants(){
-        return $this->hasMany(Restaurant::class,'owner_id');
+    public function restaurants()
+    {
+        return $this->hasMany(Restaurant::class, 'owner_id');
     }
-    public function Domains(){
+    public function Domains()
+    {
         return $this->hasMany(Domain::class);
     }
 }

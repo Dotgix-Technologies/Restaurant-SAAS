@@ -18,7 +18,7 @@ class Restaurant extends Model
         'DBA',
         'cuisine_type',
         'restaurant_type',
-        'Liscience_no',
+        'license_no',
         'subscription_plan',
         'status',
     ];
@@ -29,5 +29,9 @@ class Restaurant extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function tenant()
+    {
+        return $this->hasOne(Tenant::class);
     }
 }

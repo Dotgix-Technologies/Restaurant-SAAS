@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import ToggleTheme from "./ToggleTheme";
-import Dropdown from "@/Components/SuperAdmin/Dropdown";
+import Dropdown from "@/Components/Restaurant/Dropdown";
 import { usePage } from '@inertiajs/react';
 
 interface NavbarProps {
@@ -82,7 +82,7 @@ export default function Navbar({ isSidebarOpen, setIsSidebarOpen }: NavbarProps)
 
                             <Dropdown.Content>
                                 <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
-                                <Dropdown.Link href={route('logout')} method="post" as="button">
+                                <Dropdown.Link href={route('SuperAdmin.logout')} method="post" as="button">
                                     Log Out
                                 </Dropdown.Link>
                             </Dropdown.Content>

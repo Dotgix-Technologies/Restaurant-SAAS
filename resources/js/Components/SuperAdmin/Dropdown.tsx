@@ -93,7 +93,7 @@ const Content = ({
                 >
                     <div
                         className={
-                            `bg-[radial-gradient(at_25%_25%,#1E2A47,#0D1321)]  text-white dark:bg-[radial-gradient(at_25%_25%,#d1d5db,#ffffff,#f3f4f6)] dark:text-gray-900 rounded-md ring-1 ring-black ring-opacity-5 ` +
+                            `rounded-md ring-1 ring-black ring-opacity-5 ` +
                             contentClasses
                         }
                     >
@@ -114,7 +114,7 @@ const DropdownLink = ({
         <Link
             {...props}
             className={
-                'block w-full px-4 py-2 text-start text-sm leading-5 dark:text-gray-900 transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700  focus:outline-none text-gray-100 dark:hover:bg-gray-800 dark:focus:bg-gray-100 ' +
+                'block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 dark:focus:bg-gray-800 ' +
                 className
             }
         >
