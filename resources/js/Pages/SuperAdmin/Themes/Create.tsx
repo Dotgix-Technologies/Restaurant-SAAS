@@ -9,19 +9,21 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import React, { FormEventHandler, useState } from 'react';
 import TextAreaInput from '@/Components/SuperAdmin/TextAreaInput';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileZipper } from '@fortawesome/free-solid-svg-icons';
 const MySwal = withReactContent(Swal)
 const Create: React.FC = () => {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
-        category: '',
+        forRestaurant: '',
+        forCuisine: '',
         data: '',
-        dataStructure: '',
         status: 'active',
         description: '',
-        file: null as File | null,
+        zipFile: null as File | null,
     });
 
-    const categoryOptions = [
+    const forCuisineOptions = [
         { value: "FastFood", label: "FastFood" },
         { value: "Italian", label: "Italian" },
         { value: "Chinese", label: "Chinese" },
@@ -36,7 +38,11 @@ const Create: React.FC = () => {
         { value: "Vegan", label: "Vegan" },
         { value: "Other", label: "Other" },
     ];
-
+    const forRestaurantOptions = [
+        { value: "OnSite", label: "On-Site" },
+        { value: "CloudKitchen", label: "Cloud Kitchen" },
+        { value: "Hybrid", label: "Hybrid" },
+    ];
     const statusOptions = [
         { value: "active", label: "Active" },
         { value: "Under Maintainance", label: "Under Maintenance" },
@@ -45,10 +51,9 @@ const Create: React.FC = () => {
 
     const { flash } = usePage().props as { flash?: { success?: string, error?: String } };
     const submit: FormEventHandler = (e) => {
-        console.log('Form submitted', data);
+        e.preventDefault();
         try {
-            post(route('SuperAdmin.users.store'), {
-                onFinish: () => reset('name'),
+            post(route('SuperAdmin.theme.store'), {
                 onSuccess: () => {
                     let successMessage = flash?.success;
                     MySwal.fire({
@@ -124,17 +129,30 @@ const Create: React.FC = () => {
                                     <InputError message={errors.name} className="mt-2" />
                                 </div>
                             </div>
-                            {/* Category Select */}
+                            {/* For Cuisine Select */}
                             <div>
-                                <InputLabel htmlFor="category" value="Category" />
+                                <InputLabel htmlFor="forCuisine" value="For Cuisine" />
                                 <div className="mt-2">
                                     <FormSelect
-                                        defaultValue={categoryOptions[0].value}
-                                        options={categoryOptions}
-                                        value={data.category}
-                                        onChange={(value) => setData('category', value)}
+                                        defaultValue={forCuisineOptions[0].value}
+                                        options={forCuisineOptions}
+                                        value={data.forCuisine}
+                                        onChange={(value) => setData('forCuisine', value)}
                                     />
-                                    <InputError message={errors.category} className="mt-2" />
+                                    <InputError message={errors.forCuisine} className="mt-2" />
+                                </div>
+                            </div>
+                            {/* For Restaurant Select */}
+                            <div>
+                                <InputLabel htmlFor="forRestaurant" value="For Restaurant" />
+                                <div className="mt-2">
+                                    <FormSelect
+                                        defaultValue={forRestaurantOptions[0].value}
+                                        options={forRestaurantOptions}
+                                        value={data.forRestaurant}
+                                        onChange={(value) => setData('forRestaurant', value)}
+                                    />
+                                    <InputError message={errors.forRestaurant} className="mt-2" />
                                 </div>
                             </div>
                             {/* Data Input */}
@@ -142,28 +160,15 @@ const Create: React.FC = () => {
                                 <InputLabel htmlFor="data" value="Data" />
                                 <div className="mt-2">
                                     <TextAreaInput
-                                        id="data"
-                                        name="data"
+                                        id="configData"
+                                        name="configData"
                                         value={data.data}
                                         className="mt-1 block w-full"
-                                        onChange={(e) => setData('data', e.target.value)}
+                                        onChange={(e) => setData({ ...data, data: e.target.value })}
                                         required
                                     />
+
                                     <InputError message={errors.data} className="mt-2" />
-                                </div>
-                            </div>
-                            <div>
-                                <InputLabel htmlFor="data" value="Data Structure" />
-                                <div className="mt-2">
-                                    <TextAreaInput
-                                        id="dataStructure"
-                                        name="dataStructure"
-                                        value={data.dataStructure}
-                                        className="mt-1 block w-full"
-                                        onChange={(e) => setData('dataStructure', e.target.value)}
-                                        required
-                                    />
-                                    <InputError message={errors.dataStructure} className="mt-2" />
                                 </div>
                             </div>
                             <div>
@@ -193,64 +198,68 @@ const Create: React.FC = () => {
                                 </div>
                             </div>
                             <div className="mt-6">
-                                <InputLabel htmlFor="kyc_document" value="Upload KYC Document" />
+                                <InputLabel htmlFor="zipFile" value="Upload Build file" />
+
                                 <div
-                                    className="border-2 border-dashed border-gray-400 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 transition"
-                                    onClick={() => document.getElementById("kycDocuments")?.click()} // ✅ Click triggers file input
+                                    className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${data.zipFile ? 'border-green-500' : 'border-gray-400 hover:border-blue-500'
+                                        }`}
+                                    onClick={() => document.getElementById("zipFile")?.click()}
                                     onDragOver={(e) => e.preventDefault()}
                                     onDrop={(e) => {
                                         e.preventDefault();
-                                        const file = e.dataTransfer.files[0];
+                                        const file = e.dataTransfer.files?.[0];
 
-
-                                        if (file && ['application/pdf', 'application/msword',
-                                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                                            'text/plain'].includes(file.type)) {
-                                            setData({ ...data, file: file });
+                                        if (file && file.name.endsWith('.zip')) {
+                                            setData({ ...data, zipFile: file });
                                         } else {
                                             MySwal.fire({
                                                 toast: true,
                                                 title: 'Warning!',
-                                                text: "Only document files (.pdf, .doc, .docx, .txt) are allowed.",
+                                                text: "Only .zip files are allowed.",
                                                 icon: 'warning',
                                                 position: 'top-end',
-                                                showConfirmButton: false
+                                                showConfirmButton: false,
+                                                timer: 3000,
                                             });
                                         }
                                     }}
                                 >
-                                    {data.file ? (
-                                        <p className="text-green-500">{data.file.name}</p>
+                                    {data.zipFile ? (
+                                        <p className="text-green-600 font-semibold"> <FontAwesomeIcon icon={faFileZipper} /> {data.zipFile.name}</p>
                                     ) : (
-                                        <p className="text-gray-500">Drag & Drop your document here or click to upload</p>
+                                        <p className="text-gray-500">Drag & drop your .zip file here or click to select</p>
                                     )}
 
-                                    {/* Hidden File Input Inside the Div */}
                                     <input
-                                        id="kycDocuments"
+                                        id="zipFile"
                                         type="file"
-                                        name="kycDocuments"
-                                        accept=".pdf,.doc,.docx,.txt"
+                                        name="zipFile"
+                                        accept=".zip"
                                         className="hidden"
                                         onChange={(e) => {
                                             const file = e.target.files?.[0];
 
-                                            // Ensure file exists and validate type manually (optional but recommended)
-                                            if (file && ['application/pdf', 'application/msword',
-                                                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                                                'text/plain'].includes(file.type)) {
-                                                setData({ ...data, file: file });
+                                            if (file && file.name.endsWith('.zip')) {
+                                                setData({ ...data, zipFile: file });
                                             } else {
-                                                alert("Only document files (.pdf, .doc, .docx, .txt) are allowed.");
+                                                MySwal.fire({
+                                                    toast: true,
+                                                    title: 'Warning!',
+                                                    text: "Only .zip files are allowed.",
+                                                    icon: 'warning',
+                                                    position: 'top-end',
+                                                    showConfirmButton: false,
+                                                    timer: 3000,
+                                                });
+                                                e.target.value = ""; // reset file input
                                             }
                                         }}
-                                        required
                                     />
-
                                 </div>
 
-                                {errors.file && <p className="mt-2 text-red-500 text-sm">{errors.file}</p>}
+                                {errors.zipFile && <p className="mt-2 text-red-500 text-sm">{errors.zipFile}</p>}
                             </div>
+
                             {/* Submit Button */}
                             <div>
                                 <SubmitButton type="submit" className="w-full" disabled={processing}>

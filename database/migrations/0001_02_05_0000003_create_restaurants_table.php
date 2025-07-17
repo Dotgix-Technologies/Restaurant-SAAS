@@ -25,7 +25,7 @@ return new class extends Migration
             $table->String('license_no')->nullable();
             $table->string('subscription_plan')->default('Free');
             $table->string('logo')->nullable(); // Path to the restaurant logo
-            $table->enum('status', ['pending_verification','verified' ,'Approved', 'Active', 'Offline', 'Vacation', 'Deactivaed', 'Suspended'])->default('pending_verification');
+            $table->enum('status', ['pending_verification','verified' ,'Approved', 'Active', 'Offline', 'Vacation', 'Deactivated', 'Suspended'])->default('pending_verification');
             $table->timestamps();
         });
     }

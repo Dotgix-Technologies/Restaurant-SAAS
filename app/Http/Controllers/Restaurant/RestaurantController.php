@@ -36,7 +36,7 @@ class RestaurantController extends Controller
         $validated = $request->validated();
 
         $requiresVerification = false;
-
+        $user = auth()->user();
         if (
             isset($validated['email']) && $validated['email'] !== $restaurant->email ||
             isset($validated['license_no']) && $validated['license_no'] !== $restaurant->license_no ||
@@ -44,7 +44,24 @@ class RestaurantController extends Controller
         ) {
             $requiresVerification = true;
         }
+        if (isset($validated['logo']) && $validated['logo'] !== $restaurant->logo) {
+            // Handle logo upload
+            if ($request->hasFile('logo')) {
+                $file = $request->file('logo');
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $folderPath = public_path('gallery/' . $user->id);
 
+                if (!file_exists($folderPath)) {
+                    mkdir($folderPath, 0755, true);
+                }
+
+                $file->move($folderPath, $filename);
+
+                $validated['logo'] = 'gallery/' . $user->id . '/' . $filename;
+            } else {
+                unset($validated['logo']);
+            }
+        }
         if ($requiresVerification) {
             $validated['status'] = 'pending_verification';
         }

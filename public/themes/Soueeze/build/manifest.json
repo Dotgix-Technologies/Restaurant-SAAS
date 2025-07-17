@@ -1,0 +1,11 @@
+{
+  "resources/js/Themes/Soueeze/Pages/Index.tsx": {
+    "file": "assets/Index-rpNyFlLi.js",
+    "name": "Index",
+    "src": "resources/js/Themes/Soueeze/Pages/Index.tsx",
+    "isEntry": true,
+    "css": [
+      "assets/Index-vHIubPVI.css"
+    ]
+  }
+}

@@ -20,6 +20,7 @@ interface Props {
     value: string;
     setData: (field: string, value: string) => void;
     errors: { location?: string };
+    logo: string;
 }
 
 const LocationPicker: React.FC<{ setData: (field: string, value: string) => void }> = ({ setData }) => {
@@ -37,8 +38,16 @@ const LocationPicker: React.FC<{ setData: (field: string, value: string) => void
     return position ? <Marker position={position} icon={customIcon} /> : null;
 };
 
-const LocationInput: React.FC<Props> = ({ value, setData, errors }) => {
-console.log("LocationInput Rendered with value:", value);
+const LocationInput: React.FC<Props> = ({ value, setData, errors,logo }) => {
+console.log("LocationInput Rendered with value:", logo);
+const restaurantIcon = logo
+    ? new L.Icon({
+        iconUrl: logo,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+      })
+    : customIcon;
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [defaultPosition, setDefaultPosition] = useState<[number, number]>([51.505, -0.09]);
@@ -69,7 +78,7 @@ console.log("LocationInput Rendered with value:", value);
                     value={value}
                     className="block w-full pl-3 pr-10 py-2"
                     autoComplete="off"
-                    onChange={(e) => setData("restrolocation", e.target.value)}
+                   onChange={(e) => setData("location", e.target.value)}
                     required
                 />
                 <FontAwesomeIcon
@@ -88,7 +97,7 @@ console.log("LocationInput Rendered with value:", value);
                         <div className="h-60">
                             <MapContainer center={defaultPosition} zoom={13} className="h-full w-full">
                                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                                <Marker position={defaultPosition} icon={customIcon} />
+                                <Marker position={defaultPosition} icon={restaurantIcon} />
                                 <LocationPicker setData={setData} />
                             </MapContainer>
                         </div>

@@ -1,0 +1,236 @@
+{
+    "navbar": {
+        "logo": {
+            "src": "https://www.mainsqueezejuiceco.com/assets/favicons/msjc_logo.svg",
+            "alt": "logo",
+            "width": "100px"
+        },
+        "links": [
+            { "label": "CATER", "href": "/cater" },
+            { "label": "MENU", "href": "/menu" },
+            { "label": "LOCATIONS", "href": "/locations" },
+            { "label": "MEET OUR TEAM", "href": "/team" },
+            { "label": "OUR STORY", "href": "/story" },
+            { "label": "CONTRIBUTE", "href": "/contribute" }
+        ],
+        "loginButton": {
+            "label": "LOGIN"
+        },
+        "cartIcon": true
+    },
+
+    "heroSection": {
+        "tagline": "High Quality",
+        "title": "FRESH COLD\nPRESSED JUICE",
+        "subtext": "It is a long established fact that a reader will be distracted by the readable content of a page.",
+        "orderButton": {
+            "label": "Order",
+            "highlight": "NOW"
+        },
+        "socials": [{ "platform": "facebook" }, { "platform": "twitter" }, { "platform": "linkedin" }, { "platform": "instagram" }],
+        "image": {
+            "src": "https://www.mainsqueezejuiceco.com/assets/products/Cleanses_Pack/combo-1.png",
+            "alt": "Fresh Cold Pressed Juice Bottles"
+        }
+    },
+
+    "ourStorySection": {
+        "sectionTag": "About Us",
+        "sectionTitle": "Our Story",
+        "description": "Main Squeeze Juice Company was born when we realized that there were limited healthy and convenient food options available in the fast casual restaurant space.",
+        "readMoreLink": {
+            "label": "Read the Full Story",
+            "href": "#"
+        },
+        "images": {
+            "background": {
+                "src": "https://bloximages.newyork1.vip.townnews.com/theleadernews.com/content/tncms/assets/v3/editorial/9/4d/94d8ac28-21ec-11ef-bd81-bbd445d1a73f/665e2f627a74a.image.jpg?resize=750%2C600",
+                "alt": "Storefront"
+            },
+            "foreground": {
+                "src": "https://bloximages.newyork1.vip.townnews.com/theleadernews.com/content/tncms/assets/v3/editorial/9/55/95596f98-21ec-11ef-a2b7-13b4042241e3/665e2f635440c.image.jpg?resize=750%2C438",
+                "alt": "Happy Customer"
+            }
+        }
+    },
+
+    "highlightSection": {
+        "tagline": "Top Selling Juices",
+        "title": "Take Your Health Back!",
+        "description": "Main Squeeze Juice Company was born when we realized that there were limited healthy and convenient food.",
+        "button": {
+            "label": "View Our Juice Menu",
+            "href": "#"
+        },
+        "backgroundImage": "https://www.mainsqueezejuiceco.com/assets/juices-bg.png.jpg",
+        "juices": [
+            {
+                "name": "31 - Immunity™",
+                "image": "https://www.mainsqueezejuiceco.com/assets/juices/pic_web_immunity.png"
+            },
+            {
+                "name": "03 - Detox™",
+                "image": "https://www.mainsqueezejuiceco.com/assets/juices/pic_web_detox.png"
+            },
+            {
+                "name": "07 - Power™",
+                "image": "https://www.mainsqueezejuiceco.com/assets/juices/pic_web_power.png"
+            },
+            {
+                "name": "02 - Vision™",
+                "image": "https://www.mainsqueezejuiceco.com/assets/juices/pic_web_vision.png"
+            },
+            {
+                "name": "03 - Vitality™",
+                "image": "https://www.mainsqueezejuiceco.com/assets/juices/pic_web_detox.png"
+            },
+            {
+                "name": "09 - Prime",
+                "image": "https://www.mainsqueezejuiceco.com/assets/juices/pic_web_vitality.png"
+            }
+        ]
+    },
+
+    "itemsSection": {
+        "tagline": "Smoothies",
+        "title": "Superfood Smoothies",
+        "description": "Main Squeeze Juice Company was born when we realized that there were limited healthy and convenient food.",
+        "backgroundImage": "https://www.mainsqueezejuiceco.com/assets/delivery-bg.jpg",
+        "items": [
+            {
+                "name": "PROTEIN PUNCH",
+                "image": "https://www.mainsqueezejuiceco.com/assets/smoothies/pic_web_classic.png"
+            },
+            {
+                "name": "MANGO J",
+                "image": "https://www.mainsqueezejuiceco.com/assets/smoothies/pic_web_pbandj.png"
+            },
+            {
+                "name": "CHOCOLATE LOVE",
+                "image": "https://www.mainsqueezejuiceco.com/assets/smoothies/pic_web_plantpower.png"
+            },
+            {
+                "name": "TROPIKALE",
+                "image": "https://www.mainsqueezejuiceco.com/assets/smoothies/pic_web_tropikale.png"
+            },
+            {
+                "name": "PB PROTEIN",
+                "image": "https://www.mainsqueezejuiceco.com/assets/smoothies/pic_web_proteinpunch.png"
+            }
+        ]
+    },
+
+    "handCraftedBowls": {
+        "tagline": "Bowl",
+        "title": "Hand Crafted\nBowls",
+        "description": "The beautiful pitaya fruit is packed with vitamin B1 (thiamine), B2 (riboflavin), B3 (niacin), calcium, iron, phosphorus, prebiotics, and fiber. Pitaya bowls help decrease inflammation, support digestion with high fiber, and is heart healthy.",
+        "pronunciation": "(AH-Sigh-EE)",
+        "cta": {
+            "label": "View Our Bowl Menu",
+            "href": "#"
+        },
+        "image": {
+            "src": "https://www.mainsqueezejuiceco.com/img/asset/YXNzZXRzL2Jvd2xzL2Jvd2wtaW1nLTEuanBn/bowl-img-1.jpg?p=sm-webp&s=f0f857673b7da1a5e2f18446695c01ff",
+            "alt": "Acai Bowl"
+        }
+    },
+
+    "rewards": {
+        "tagline": "My Main Squeeze Rewards",
+        "title": "Join, Earn, Redeem.",
+        "backgroundImage": "https://www.mainsqueezejuiceco.com/assets/delivery-bg.jpg",
+        "fields": {
+            "nameLabel": "Name",
+            "phoneLabel": "Phone Number",
+            "storeLabel": "Select Store"
+        },
+        "consentText": "By signing up, I agree to receive recurring automated marketing text messages (e.g. sale promotions) at the phone number provided. Consent is not a condition to purchase. Msg & data rates may apply. Msg frequency varies. Reply HELP for help and STOP to cancel. View our",
+        "termsLink": {
+            "label": "Terms of Use",
+            "href": "/terms-of-use"
+        },
+        "privacyLink": {
+            "label": "Privacy Policy",
+            "href": "/privacy-policy"
+        },
+        "submitButton": {
+            "label": "Submit Now",
+            "loadingLabel": "Please wait..."
+        },
+        "stores": [
+            { "label": "Atascocita, TX", "value": "14" },
+            { "label": "Baton Rouge, LA (Ben Hur)", "value": "5" },
+            { "label": "Baton Rouge, LA (Long Farm)", "value": "13" },
+            { "label": "Bossier City, LA", "value": "11" },
+            { "label": "Columbus, GA", "value": "38" },
+            { "label": "Cypress, TX", "value": "21" },
+            { "label": "Dallas, TX (Lakewood)", "value": "46" },
+            { "label": "Friendswood, TX", "value": "28" },
+            { "label": "Fulshear, TX", "value": "16" },
+            { "label": "Garland, TX", "value": "45" },
+            { "label": "Goodyear, AZ", "value": "52" },
+            { "label": "Hattiesburg, MS", "value": "20" },
+            { "label": "Heights (Houston, TX)", "value": "51" },
+            { "label": "Jacksonville, FL (Jax Beach)", "value": "27" },
+            { "label": "Katy, TX", "value": "2" },
+            { "label": "Lafayette, LA", "value": "49" },
+            { "label": "Lake Charles, LA", "value": "1" },
+            { "label": "Mandeville, LA", "value": "26" },
+            { "label": "Metairie, LA (Veterans)", "value": "10" },
+            { "label": "Missouri City, TX", "value": "30" },
+            { "label": "Mont Belvieu, TX", "value": "33" },
+            { "label": "Murfreesboro, TN", "value": "37" },
+            { "label": "New Orleans, LA (Carondelet)", "value": "19" },
+            { "label": "New Orleans, LA (Lakeview)", "value": "22" },
+            { "label": "New Orleans, LA (Place St. Charles)", "value": "36" },
+            { "label": "New Orleans, LA (Uptown)", "value": "25" },
+            { "label": "Pearland, TX", "value": "18" },
+            { "label": "St. Louis, MO (Central Westend)", "value": "32" },
+            { "label": "St. Louis, MO (Rock Hill)", "value": "42" },
+            { "label": "Sugar Land, TX (University)", "value": "9" },
+            { "label": "Webster, TX", "value": "6" }
+        ]
+    },
+
+    "gallery": {
+        "instagramLogo": "https://www.mainsqueezejuiceco.com/assets/instagaram-logo.png",
+        "galleryImages": [
+            "https://scontent-hel3-1.cdninstagram.com/v/t51.82787-15/516712761_18311308378243145_6207310094772889130_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ccb=1-7&_nc_sid=18de74&_nc_ohc=ERbKKPtJSGoQ7kNvwGFbO_E&_nc_oc=Adltofj_erM5WtNmGr8tTRH8MY_sgkawK6uaKjyRG1Woiiy3fHeOf8Bwqhfh8cWVWF_5q29Ba6yN83RNwMhFnkQS&_nc_zt=23&_nc_ht=scontent-hel3-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=5qhZufJUMoWcF5TiEqO0tw&oh=00_AfRISqDI6m89NdUqCvNtzfoYakHRrJKFi3qayf-QSGp1Lg&oe=6875BE41",
+            "https://scontent-hel3-1.cdninstagram.com/v/t51.82787-15/517033278_18311299672243145_8293206324715777230_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ccb=1-7&_nc_sid=18de74&_nc_ohc=SFczd4o9WEwQ7kNvwFxowa6&_nc_oc=Admp8PTNYSGWu2gw7hCNeprF98IeLWIqW6CQ-PzAeHvms9pL3lGGtNRCGcJH4L1nj1K4C0g0gLzlODiegJf4kJl8&_nc_zt=23&_nc_ht=scontent-hel3-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=5qhZufJUMoWcF5TiEqO0tw&oh=00_AfTmflshwhRRe9RiNY4mWT1RwAJIMhUD1Ro7cgkroQ-0lw&oe=6875B78A",
+            "https://scontent-hel3-1.cdninstagram.com/v/t51.82787-15/517097911_18311121370243145_4838983956159700825_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=111&ccb=1-7&_nc_sid=18de74&_nc_ohc=S5QF0WVf_2EQ7kNvwEI7oxC&_nc_oc=AdlYDCJj237Puy0X64VYSJEGxrGTkgVvP6vgibfNke3vrd7ifboLI2oCCOkp4z8hX59RqS_ucK-z5wPZ7wBlSgPI&_nc_zt=23&_nc_ht=scontent-hel3-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=5qhZufJUMoWcF5TiEqO0tw&oh=00_AfRNcqk6d0-oxKGSYyeoFRzk3Kwq8ryfGzinwsXs9wCyUg&oe=6875AE9A",
+            "https://scontent-hel3-1.cdninstagram.com/v/t51.82787-15/504025532_18310888678243145_6334197321987398090_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ccb=1-7&_nc_sid=18de74&_nc_ohc=2xVSrfQ-Z_cQ7kNvwFsHoBN&_nc_oc=AdnqIcI_gljXSbX5y19RrejDFZg5-0hMqChYp07xhVdaAb_fJIx6CYM2mp847n8dIlPUlVujJNsSilaI9W7Tv6KH&_nc_zt=23&_nc_ht=scontent-hel3-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=5qhZufJUMoWcF5TiEqO0tw&oh=00_AfQASbaQU6E6begD_bJD1CTcSVWfIiN4I3y6-Kq5k3X81Q&oe=6875B14A",
+            "https://scontent-hel3-1.cdninstagram.com/v/t51.82787-15/514908333_18310685419243145_8127476176738560064_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=105&ccb=1-7&_nc_sid=18de74&_nc_ohc=Dmnpn2o-HgkQ7kNvwE6XehB&_nc_oc=Adk8KsI4VVId3Wz_i8rCLiomQyj5-ZQ1m2I-iTUXMb-cpnfgvoEnv-S0QQTcBoSirgJdtLrOaq3DPuFp2KCnbS3X&_nc_zt=23&_nc_ht=scontent-hel3-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=5qhZufJUMoWcF5TiEqO0tw&oh=00_AfSocxYqq_Cpxc0EoUxXTik2vHj4MFxO-VeU0_9r9Fp-KQ&oe=6875964B"
+        ],
+        "footerLogo": "https://www.mainsqueezejuiceco.com/assets/favicons/msjc_logo.svg",
+        "footerLinks": ["Cater", "Menu", "Locations", "Meet Our Team", "Our Story", "Contribute"],
+        "contactPhone": "504-322-7055",
+        "socialLinks": [
+            {
+                "alt": "Facebook",
+                "link": "https://facebook.com"
+            },
+            {
+                "alt": "Twitter",
+                "link": "https://twitter.com"
+            },
+            {
+                "alt": "LinkedIn",
+                "link": "https://linkedin.com"
+            }
+        ]
+    },
+
+    "footer": {
+        "socialIcons": [
+            { "alt": "Facebook", "link": "https://facebook.com" },
+            { "alt": "Twitter", "link": "https://twitter.com" },
+            { "alt": "LinkedIn", "link": "https://linkedin.com" }
+        ],
+        "footerLinks": [
+            { "label": "Contact Us", "href": "#" },
+            { "label": "Press", "href": "#" },
+            { "label": "Privacy Policy", "href": "#" }
+        ],
+        "copyright": "Copyright © 2020 Company. All rights reserved"
+    }
+}

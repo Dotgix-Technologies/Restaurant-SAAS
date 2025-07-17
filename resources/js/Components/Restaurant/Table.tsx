@@ -183,7 +183,15 @@ const renderCellContent = (col: Column, row: Record<string, any>) => {
                 <select
                     className={`border px-2 py-1 rounded text-sm ${col.putactions.class || ""}`}
                     defaultValue={value}
-                    onChange={(e) => handlePutAction(e, col.putactions?.route, row.id)}
+                    onChange={(e) => {
+                        const route = col.putactions?.route;
+                        if (route) {
+                            handlePutAction(e, route, row.id);
+                        } else {
+                            console.warn("No route defined for putaction");
+                        }
+                    }}
+
                 >
                     {col.putactions.options.map((option, index) => (
                         <option key={index} value={option.value}>
@@ -263,7 +271,15 @@ const nestedCellContent = (col: NestedColumn, row: Record<string, any>) => {
                 <select
                     className={`border px-2 py-1 rounded text-sm ${col.putactions.class || ""}`}
                     defaultValue={value}
-                    onChange={(e) => handlePutAction(e, col.putactions?.route, row.id)}
+                    onChange={(e) => {
+                        const route = col.putactions?.route;
+                        if (route) {
+                            handlePutAction(e, route, row.id);
+                        } else {
+                            console.warn("No route defined for putaction");
+                        }
+                    }}
+
                 >
                     {col.putactions.options.map((option, index) => (
                         <option key={index} value={option.value}>

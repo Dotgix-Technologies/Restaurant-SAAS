@@ -19,7 +19,7 @@ class Adminmiddleware
         Log::info('Admin middleware accessed by user: ' . (auth()->check() ? auth()->user()->name : 'Guest'));
         if(!auth()->check()){
             Log::warning('Unauthorized access attempt to admin middleware by unauthenticated user.');
-            return redirect('SuperAdmin/login')->with('error', 'You must be logged in to access this page.');
+            return redirect('superAdmin/login')->with('error', 'You must be logged in to access this page.');
         }
         if ( auth()->user()->role == 'SuperAdmin') {
               Log::info('Admin middleware accessed by user: ' . auth()->user()->name);

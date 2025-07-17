@@ -133,9 +133,10 @@ const KycUpdateForm: React.FC<Props> = ({ restaurantType, existingDocuments, res
                                 onChange={(e) => handleFileChange(index, e.target.files?.[0] || null)}
                                 className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
                             />
-                            {errors[`kyc_documents.${index}.document`] && (
-                                <div className="text-red-500 text-sm">{errors[`kyc_documents.${index}.document`]}</div>
+                            {(errors as Record<string, string>)[`kyc_documents.${index}.document`] && (
+                                <div className="text-red-500 text-sm">{(errors as Record<string, string>)[`kyc_documents.${index}.document`]}</div>
                             )}
+
                         </div>
                     </div>
                 );

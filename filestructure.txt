@@ -81,6 +81,7 @@
     |-- services.php
     |-- session.php
     |-- tenancy.php
+    |-- theme.php
 |-- database
     |-- .gitignore
     |-- factories
@@ -98,6 +99,7 @@
             |-- 0001_01_01_000000_create_users_table.php
     |-- seeders
         |-- DatabaseSeeder.php
+|-- htaccess
 |-- package-lock.json
 |-- package.json
 |-- phpunit.xml
@@ -109,6 +111,13 @@
         |-- 22
             |-- 1751996732_20250702_2310_Cloud Kitchen UI Mockup_simple_compose_01jz654qmgf4aa83xavs3t8b4t.png
             |-- 1751996830_20250702_2302_Desi Restaurant Website Design_simple_compose_01jz64pvx4fye97brs4412s1xx.png
+            |-- 1752182249_68702de9225cb.png
+            |-- 1752182249_68702de92a418.png
+            |-- 1752182249_68702de92ced5.png
+            |-- 1752182249_68702de937a55.png
+            |-- 1752182249_68702de93a07f.png
+            |-- 1752182249_68702de93c553.png
+            |-- 1752182249_68702de93e926.png
         |-- 23
             |-- 1752000786_20250702_2252_Value Loyalty and Protection_simple_compose_01jz646k8nf8189n42t9jhkb41.png
         |-- 25
@@ -148,7 +157,14 @@
         |-- 1750876293_Screenshot 2025-06-05 004140.png
         |-- 1750876639_screencapture-login-dotgix-slnewproject-2025-05-22-02_14_48.png
         |-- 1750883952_20250624_2130_Heartbreak for Salvation_simple_compose_01jyhccw3nfg0trphr99hwefsj.png
+        |-- 1752259288_Document.pdf
+        |-- 1752262537_20250702_2310_Cloud Kitchen UI Mockup_simple_compose_01jz654qmfexrvb4hfgj0dtf2a.png
+        |-- 1752262585_Modals Sheet.pdf
+        |-- 1752684383_Download Learner License.pdf
     |-- robots.txt
+    |-- themes
+        |-- Soueeze
+            |-- build.zip
 |-- README.md
 |-- resources
     |-- css
@@ -225,6 +241,7 @@
                     |-- Login.tsx
                 |-- Dashboard.tsx
             |-- Dashboard.tsx
+            |-- Home.tsx
             |-- Profile
                 |-- Edit.tsx
                 |-- Partials
@@ -258,6 +275,23 @@
                 |-- Auth
                     |-- Login.tsx
             |-- Welcome.tsx
+        |-- Themes
+            |-- Soueeze
+                |-- components
+                    |-- Footer.tsx
+                    |-- Gallery.tsx
+                    |-- HandCraftedBowls.tsx
+                    |-- HeroSection.tsx
+                    |-- HighlightSection.tsx
+                    |-- ItemsSection.tsx
+                    |-- Navbar.tsx
+                    |-- OurStorySection.tsx
+                    |-- Rewards.tsx
+                |-- data.json
+                |-- datatype.ts
+                |-- Layout.tsx
+                |-- Pages
+                    |-- Index.tsx
         |-- types
             |-- domains.ts
             |-- gallery.ts
@@ -300,6 +334,8 @@
     |-- web.php
 |-- saas_project_tasks.xlsx
 |-- saas_project_tasks_with_status.xlsx
+|-- scripts
+    |-- build-themes.js
 |-- storage
     |-- app
         |-- .gitignore
@@ -483,10 +519,6 @@
     |-- clue
         |-- redis-protocol
             |-- .gitattributes
-            |-- .github
-                |-- FUNDING.yml
-                |-- workflows
-                    |-- ci.yml
             |-- .gitignore
             |-- CHANGELOG.md
             |-- composer.json
@@ -536,10 +568,6 @@
                 |-- TestCase.php
         |-- redis-react
             |-- .gitattributes
-            |-- .github
-                |-- FUNDING.yml
-                |-- workflows
-                    |-- ci.yml
             |-- .gitignore
             |-- CHANGELOG.md
             |-- composer.json
@@ -788,9 +816,6 @@
     |-- evenement
         |-- evenement
             |-- .gitattributes
-            |-- .github
-                |-- workflows
-                    |-- ci.yaml
             |-- .gitignore
             |-- CHANGELOG.md
             |-- composer.json
@@ -4287,23 +4312,6 @@
         |-- reverb
             |-- .editorconfig
             |-- .gitattributes
-            |-- .github
-                |-- CODE_OF_CONDUCT.md
-                |-- CONTRIBUTING.md
-                |-- ISSUE_TEMPLATE
-                    |-- 1_Bug_report.yml
-                    |-- config.yml
-                |-- PULL_REQUEST_TEMPLATE.md
-                |-- SECURITY.md
-                |-- SUPPORT.md
-                |-- workflows
-                    |-- coding-standards.yml
-                    |-- issues.yml
-                    |-- pull-requests.yml
-                    |-- spec-tests.yml
-                    |-- static-analysis.yml
-                    |-- tests.yml
-                    |-- update-changelog.yml
             |-- .gitignore
             |-- art
                 |-- logo.svg
@@ -9704,6 +9712,136 @@
                 |-- PusherInstance.php
                 |-- PusherInterface.php
                 |-- Webhook.php
+    |-- qirolab
+        |-- laravel-themer
+            |-- .php-cs-fixer.dist.php
+            |-- CHANGELOG.md
+            |-- composer.json
+            |-- config
+                |-- theme.php
+            |-- LICENSE.md
+            |-- package-lock.json
+            |-- README.md
+            |-- src
+                |-- Commands
+                    |-- MakeThemeCommand.php
+                |-- Enums
+                    |-- CssFramework.php
+                    |-- JsFramework.php
+                |-- Exceptions
+                    |-- ThemeBasePathNotDefined.php
+                |-- Middleware
+                    |-- ThemeMiddleware.php
+                |-- Presets
+                    |-- Traits
+                        |-- AuthScaffolding.php
+                        |-- HandleFiles.php
+                        |-- PackagesTrait.php
+                        |-- PresetTrait.php
+                        |-- StubTrait.php
+                    |-- Vite
+                        |-- BootstrapPreset.php
+                        |-- ReactPreset.php
+                        |-- TailwindPreset.php
+                        |-- VitePresetExport.php
+                        |-- Vue3Preset.php
+                |-- SolutionProviders
+                    |-- ThemeSolutionProvider.php
+                |-- Theme.php
+                |-- ThemeServiceProvider.php
+                |-- ThemeViewFinder.php
+            |-- stubs
+                |-- app
+                    |-- Http
+                        |-- Controllers
+                            |-- Auth
+                                |-- AuthenticatedSessionController.php
+                                |-- ConfirmablePasswordController.php
+                                |-- EmailVerificationNotificationController.php
+                                |-- EmailVerificationPromptController.php
+                                |-- NewPasswordController.php
+                                |-- PasswordResetLinkController.php
+                                |-- RegisteredUserController.php
+                                |-- VerifyEmailController.php
+                        |-- Requests
+                            |-- Auth
+                                |-- LoginRequest.php
+                    |-- View
+                        |-- Components
+                            |-- AppLayout.php
+                            |-- GuestLayout.php
+                |-- Presets
+                    |-- bootstrap-stubs
+                        |-- js
+                            |-- app.js
+                            |-- bootstrap.js
+                        |-- sass
+                            |-- app.scss
+                            |-- _variables.scss
+                    |-- react-stubs
+                        |-- .babelrc
+                        |-- app.js
+                        |-- bootstrap.js
+                        |-- Example.jsx
+                    |-- tailwind-stubs
+                        |-- css
+                            |-- app.css
+                        |-- js
+                            |-- app.js
+                            |-- bootstrap.js
+                        |-- tailwind.config.js
+                        |-- vite.config.js
+                        |-- webpack.mix.js
+                    |-- vite.config.js
+                    |-- vue3-stubs
+                        |-- app.js
+                        |-- bootstrap.js
+                        |-- ExampleComponent.vue
+                    |-- webpack.mix.js
+                |-- resources
+                    |-- Bootstrap
+                        |-- views
+                            |-- auth
+                                |-- login.blade.php
+                                |-- passwords
+                                    |-- confirm.blade.php
+                                    |-- forget.blade.php
+                                    |-- reset.blade.php
+                                |-- register.blade.php
+                                |-- verify-email.blade.php
+                            |-- dashboard.blade.php
+                            |-- layouts
+                                |-- app.blade.php
+                                |-- guest.blade.php
+                                |-- navigation.blade.php
+                    |-- Tailwind
+                        |-- views
+                            |-- auth
+                                |-- login.blade.php
+                                |-- passwords
+                                    |-- confirm.blade.php
+                                    |-- forget.blade.php
+                                    |-- reset.blade.php
+                                |-- register.blade.php
+                                |-- verify-email.blade.php
+                            |-- components
+                                |-- application-logo.blade.php
+                                |-- auth-session-status.blade.php
+                                |-- auth-validation-errors.blade.php
+                            |-- dashboard.blade.php
+                            |-- layouts
+                                |-- app.blade.php
+                                |-- guest.blade.php
+                                |-- navigation.blade.php
+                |-- routes
+                    |-- auth.php
+                |-- tests
+                    |-- Feature
+                        |-- AuthenticationTest.php
+                        |-- EmailVerificationTest.php
+                        |-- PasswordConfirmationTest.php
+                        |-- PasswordResetTest.php
+                        |-- RegistrationTest.php
     |-- ralouphie
         |-- getallheaders
             |-- composer.json
@@ -9891,9 +10029,6 @@
                     |-- ValidatorInterface.php
     |-- ratchet
         |-- rfc6455
-            |-- .github
-                |-- workflows
-                    |-- ci.yml
             |-- .gitignore
             |-- composer.json
             |-- LICENSE
@@ -9941,9 +10076,6 @@
     |-- react
         |-- dns
             |-- .gitattributes
-            |-- .github
-                |-- workflows
-                    |-- ci.yml
             |-- .gitignore
             |-- CHANGELOG.md
             |-- composer.json
@@ -10021,9 +10153,6 @@
                 |-- TestCase.php
         |-- event-loop
             |-- .gitattributes
-            |-- .github
-                |-- workflows
-                    |-- ci.yml
             |-- .gitignore
             |-- CHANGELOG.md
             |-- composer.json
@@ -10094,9 +10223,6 @@
                     |-- TimersTest.php
         |-- promise
             |-- .gitattributes
-            |-- .github
-                |-- workflows
-                    |-- ci.yml
             |-- .gitignore
             |-- CHANGELOG.md
             |-- composer.json
@@ -10199,9 +10325,6 @@
                     |-- resolve.php
         |-- promise-timer
             |-- .gitattributes
-            |-- .github
-                |-- workflows
-                    |-- ci.yml
             |-- .gitignore
             |-- CHANGELOG.md
             |-- composer.json
@@ -10222,9 +10345,6 @@
                 |-- TimeoutExceptionTest.php
         |-- socket
             |-- .gitattributes
-            |-- .github
-                |-- workflows
-                    |-- ci.yml
             |-- .gitignore
             |-- CHANGELOG.md
             |-- composer.json
@@ -10297,9 +10417,6 @@
                 |-- UnixServerTest.php
         |-- stream
             |-- .gitattributes
-            |-- .github
-                |-- workflows
-                    |-- ci.yml
             |-- .gitignore
             |-- CHANGELOG.md
             |-- composer.json

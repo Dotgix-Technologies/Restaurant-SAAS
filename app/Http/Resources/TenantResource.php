@@ -14,14 +14,14 @@ class TenantResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-       
+
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
             'restaurant_id' => $this->restaurant_id,
-            'data'=>$this->data,
-             'created_at' => $this->created_at,
-        'updated_at' => $this->updated_at,
+            'data' => $this->data,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'domain' => new DomainResource($this->whenLoaded('Domain')),
         ];
     }

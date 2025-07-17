@@ -20,7 +20,7 @@ export default function Welcome({
     const [searchName, setSearchName] = useState('');
     const [searchCuisine, setSearchCuisine] = useState('');
     const [searchType, setSearchType] = useState('');
-    const [searchRange, setSearchRange] = useState(5);
+    const [searchRange, setSearchRange] = useState(6371);
     const [userPos, setUserPos] = useState<[number, number] | null>(null);
     const restroCuisineOptions = [
         { value: "FastFood", label: "FastFood" },
@@ -172,6 +172,7 @@ export default function Welcome({
                                     value={searchRange}
                                     onChange={(e) => setSearchRange(Number(e.target.value))}
                                     className="border border-gray-300 rounded px-4 py-2 w-full">
+                                        <option value={6371}>All</option>
                                     <option value={5}>Within 5 km</option>
                                     <option value={10}>Within 10 km</option>
                                     <option value={20}>Within 20 km</option>

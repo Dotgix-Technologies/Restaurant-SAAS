@@ -21,7 +21,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified', 'redirectAdmin'])->name('dashboard');
 Route::group(['prefix' => 'superAdmin', 'middleware' => 'isAdmin'], function () {
     Route::post('logout', [SuperAdminAuthController::class, 'logout'])->name('SuperAdmin.logout');
-    Route::get('dashboard', [SuperAdminController::class, 'index'])->name('SuperAdmin.dashboard');
+    Route::get('/dashboard', [SuperAdminController::class, 'index'])->name('SuperAdmin.dashboard');
     Route::get('tenants/index', [SuperAdminController::class, 'TenentIndex'])->name('SuperAdmin.tenants.index');
     Route::get('tenants/create', [SuperAdminController::class, 'TenantCreate'])->name('SuperAdmin.tenants.create');
     Route::post('tenants/store', [SuperAdminController::class, 'TenantStore'])->name('SuperAdmin.tenants.store');
@@ -39,7 +39,7 @@ Route::group(['prefix' => 'superAdmin', 'middleware' => 'isAdmin'], function () 
     Route::get('tenant/check/domain/{domain}', [SuperAdminController::class, 'checkDomain'])->name('SuperAdmin.tenant.domain.check');
     Route::post('tenent/create/{id}', [SuperAdminController::class, 'CreateTenent'])->name('SuperAdmin.tenent.create');
     Route::get('themes/create', [SuperAdminController::class, 'ThemeCreate'])->name('SuperAdmin.themes.create');
-    Route::post('themes/store', [SuperAdminController::class, 'ThemeStore'])->name('SuperAdmin.themes.store');
+    Route::post('theme/store', [SuperAdminController::class, 'ThemeStore'])->name('SuperAdmin.theme.store');
     Route::get('themes/index', [SuperAdminController::class, 'ThemeIndex'])->name('SuperAdmin.themes.index');
 });
 Route::group(['prefix' => 'Client', 'middleware' => 'isClient'], function () {
@@ -63,7 +63,7 @@ Route::group(['prefix' => 'SuperConsultant', 'middleware' =>  'isConsultant'], f
     Route::get('SuperConsultant/dashboard', [SuperConsultantController::class, 'index'])->name('SuperConsultant.dashboard');
 });
 Route::get('superAdmin/login', [SuperAdminAuthController::class, 'showLoginForm'])->name('SuperAdmin.login');
-Route::post('superAdmin/login/post', [SuperAdminAuthController::class, 'login'])->name('SuperAdmin.login.post');
+Route::post('superAdmin/login/post', action: [SuperAdminAuthController::class, 'login'])->name('SuperAdmin.login.post');
 Route::get('Client/login', [ClientAuthController::class, 'showLoginForm'])->name('Client.login');
 Route::post('Client/login', [ClientAuthController::class, 'login'])->name('Client.login.post');
 Route::get('Restaurant/login', [RestaurantAuthController::class, 'showLoginForm'])->name('restaurant.login');

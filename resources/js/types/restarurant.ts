@@ -11,15 +11,16 @@ export const restaurantFields = [
     "restaurant_type",
     "license_no",
     "subscription_plan",
+    "status",
     "logo",
     "location",
     "tenant",
 ] as const;
 export type RestaurantField = (typeof restaurantFields)[number];
-export type RestaurantFormData = Record<RestaurantField, string>;
+export type RestaurantFormData = Record<RestaurantField, any>;
 export interface Restaurant {
   id: number;
-  owner_id: number;
+  owner_id?: number;
   name: string;
   email: string;
   phone: string;
@@ -31,7 +32,8 @@ export interface Restaurant {
   distance?: number; // Optional for distance calculations
   license_no: string;
   subscription_plan: string;
-  logo?: string | null;
+  tenant_id?: number | string;
+  logo: string | File;
   kyc_documents: KycDocument[];
   tenant?: Tenant | null;
   status: string;

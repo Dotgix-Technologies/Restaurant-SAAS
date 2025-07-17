@@ -171,7 +171,6 @@ return [
         // Stancl\Tenancy\Features\CrossDomainRedirect::class, // https://tenancyforlaravel.com/docs/v3/features/cross-domain-redirect
         // Stancl\Tenancy\Features\ViteBundler::class,
     ],
-
     /**
      * Should tenancy routes be registered.
      *

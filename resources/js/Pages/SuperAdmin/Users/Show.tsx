@@ -394,7 +394,7 @@ const Show: React.FC<Props> = ({ user }) => {
             label: "Actions",
             type: "putaction",
             putactions: {
-                route: "/SuperAdmin/kycDoc/action",
+                route: "/superAdmin/kycDoc/action",
                 class: "bg-gray-200 dark:bg-blue-950",
                 options: [
                     { value: "pending_approval", label: "Pending Approval" },

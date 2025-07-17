@@ -11,7 +11,7 @@ import { Tenant } from '@/types/tenant';
 import { faEdit } from '@fortawesome/free-regular-svg-icons/faEdit';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Head, useForm, usePage } from '@inertiajs/react';
-import React, { useEffect,FormEventHandler, useState } from 'react';
+import React, { useEffect, FormEventHandler, useState } from 'react';
 import Swal from 'sweetalert2'
 import { router } from '@inertiajs/react';
 import withReactContent from 'sweetalert2-react-content'
@@ -33,52 +33,47 @@ export default function Dashboard() {
     const { auth, restaurant } = usePage().props as InertiaProps;
     const user = auth?.user;
     const restaurantData = restaurant?.data;
-    const initialFormData = {
-        id: restaurantData?.id ?? "",
-        owner_id: restaurantData?.owner_id ?? "",
+    const initialFormData: RestaurantFormData = {
         name: restaurantData?.name ?? "",
         email: restaurantData?.email ?? "",
         phone: restaurantData?.phone ?? "",
         address: restaurantData?.address ?? "",
         DBA: restaurantData?.DBA ?? "",
         cuisine_type: restaurantData?.cuisine_type ?? "",
-        license_no: restaurantData?.license_no ?? "",
-        location: restaurantData?.location ?? "",
         restaurant_type: restaurantData?.restaurant_type ?? "",
+        license_no: restaurantData?.license_no ?? "",
         status: restaurantData?.status ?? "",
         subscription_plan: restaurantData?.subscription_plan ?? "",
-
-        tenant_id: restaurantData?.tenant?.id ?? "",
-        domain_id: restaurantData?.tenant?.domain?.id ?? "",
-        tenant: restaurantData?.tenant ?? [],
-        kyc_documents: restaurantData?.kyc_documents ?? [],
+        logo: restaurantData?.logo ?? "",
+        location: restaurantData?.location ?? "",
+        tenant: String(restaurantData?.tenant?.id ?? ""), // 👈 Convert tenant to string id
     };
 
     const { data, setData, put, processing, errors, reset, progress } = useForm<RestaurantFormData>(initialFormData);
     const { flash } = usePage().props as { flash?: { success?: string; error?: string } };
+    const [preview, setPreview] = useState<string>(
+        restaurantData?.logo ? `/${restaurantData.logo}` : ""
+    );
 
     useEffect(() => {
         // Whenever restaurantData changes (example: after update), refresh the form data
         setData({
-            id: restaurantData?.id ?? "",
-            owner_id: restaurantData?.owner_id ?? "",
             name: restaurantData?.name ?? "",
             email: restaurantData?.email ?? "",
             phone: restaurantData?.phone ?? "",
             address: restaurantData?.address ?? "",
             DBA: restaurantData?.DBA ?? "",
+            logo: restaurantData?.logo ?? "",
             cuisine_type: restaurantData?.cuisine_type ?? "",
             license_no: restaurantData?.license_no ?? "",
             location: restaurantData?.location ?? "",
             restaurant_type: restaurantData?.restaurant_type ?? "",
             status: restaurantData?.status ?? "",
             subscription_plan: restaurantData?.subscription_plan ?? "",
-            tenant_id: restaurantData?.tenant?.id ?? "",
-            domain_id: restaurantData?.tenant?.domain?.id ?? "",
             tenant: restaurantData?.tenant ?? [],
-            kyc_documents: restaurantData?.kyc_documents ?? [],
         });
     }, [restaurantData]);
+    console.log(restaurantData?.logo, data);
 
     const UpdateInformation: FormEventHandler = async (e) => {
         e.preventDefault();
@@ -168,17 +163,45 @@ export default function Dashboard() {
                                         <TextInput
                                             id={field}
                                             name={field}
-                                            value={data[field]}
-                                            onChange={(e) => setData(field, e.target.value)}
+                                            value={data[field as keyof RestaurantFormData]}
+                                            onChange={(e) =>
+                                                setData(field as keyof RestaurantFormData, e.target.value)
+                                            }
+
+
                                             required
                                             className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
                                         />
                                     </div>
                                 ))}
+                                <input
+                                    type="file"
+                                    name="logo"
+                                    id="logo"
+                                    accept="image/*"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            setData("logo", file);
+                                            setPreview(URL.createObjectURL(file));
+                                        }
+                                    }}
+
+                                />
+                                {preview && (
+                                    <div className="mt-2">
+                                        <img
+                                            src={preview}
+                                            alt="Logo Preview"
+                                            className="h-24 w-24 object-cover border rounded"
+                                        />
+                                    </div>
+                                )}
 
                                 <LocationInput
                                     value={data.location}
                                     setData={setData}
+                                    logo={data.logo}
                                     errors={errors}
                                 />
 
@@ -189,6 +212,7 @@ export default function Dashboard() {
                                     <InputLabel htmlFor="restaurant_type" value="Restaurant Type" />
                                     <div className="mt-2">
                                         <FormSelect
+                                            defaultValue={data.restaurant_type}
                                             options={[{ value: "OnSite", label: "OnSite" },
                                             { value: "CloudKitchen", label: "CloudKitchen" },
                                             { value: "Hybrid", label: "Hybrid" }]}

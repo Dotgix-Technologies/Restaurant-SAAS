@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 class ApplicationController extends Controller
 {
-   public function index()
+    public function index()
     {
-        $restaurants = Restaurant::with(['tenant.Domain'])->get();
+        $restaurants = Restaurant::with(['tenant.Domain'])->whereIn('status', ['verified' ,'Approved', 'Active'])->get();
         return inertia('Welcome', [
             'canLogin' => route('login'),
             'canRegister' => route('register'),

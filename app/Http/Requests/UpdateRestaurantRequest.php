@@ -32,6 +32,8 @@ class UpdateRestaurantRequest extends FormRequest
             'restaurant_type' => 'required|string|in:OnSite,CloudKitchen,Hybrid',
             'license_no' => 'nullable|string|max:255',
             'subscription_plan' => 'nullable|string|max:255',
+            'logo' => 'nullable|file|max:255',
+            'status' => 'nullable|string|in:pending_verification,verified,Approved,Active,Offline,Vacation,Deactivated,Suspended',
             'tenant_id' => 'nullable|exists:tenants,id',
             'domain_id' => 'nullable|exists:domains,id',
         ];

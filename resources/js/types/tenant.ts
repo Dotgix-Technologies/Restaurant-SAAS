@@ -14,7 +14,7 @@ export interface Tenant {
   id: number;
   user_id: number;
   restaurant_id: number;
-  domain?: Domain;
+  domain?: Domain ;
   status?: string;
   created_at: string;
   updated_at: string;

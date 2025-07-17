@@ -6,17 +6,17 @@ import withReactContent from 'sweetalert2-react-content'
 const MySwal = withReactContent(Swal)
 interface NestedColumn {
     key: string;
-    label: string | React.ReactNode;
+    label: string;
     type: "text" | "image" | "link" | "file" | "status" | "date" | "action" | "putaction";
-    actions?: { label: string; route: string; class: string }[];
+    actions?: { label: string | JSX.Element; route: string; class: string }[];
     putactions?: { options: { label: string; value: string }[]; route: string; class?: string };
     conditions?: Record<string, string>;
 }
-export interface Column {
+export interface Column {   
     key: string;
     label: string;
     type: "text" | "image" | "link" | "status" | "file" | "date" | "action" | "putaction" | "nestedColumns";
-    actions?: { label: string; route: string; class: string }[];
+    actions?: { label: string| JSX.Element; route: string; class: string }[];
     putactions?: { options: { label: string; value: string }[]; route: string; class?: string };
     conditions?: Record<string, string>;
     nestedColumns?: NestedColumn[];
@@ -64,6 +64,9 @@ const Table: React.FC<TableProps> = ({ title = "Table", headcustomaction = "", c
                             ))}
                         </tr>
                     </thead>
+
+
+
                     {/* Table Body */}
                     <tbody>
                         {data.map((row, rowIndex) => (
@@ -94,7 +97,7 @@ const renderCellContent = (col: Column, row: Record<string, any>) => {
 
         case "image":
             return value ? (
-                <img src={`/${value}`} alt="Profile" className="w-10 max-h-20 max-w-20 h-10 rounded-full object-cover" />
+                <img src={value} alt="Profile" className="w-10 h-10 rounded-full object-cover" />
             ) : (
                 <span className="text-gray-400">No Image</span>
             );
@@ -173,12 +176,22 @@ const renderCellContent = (col: Column, row: Record<string, any>) => {
             } else {
                 return <span className="text-gray-400">Invalid Data</span>;
             }
+
+
         case "putaction":
             return col.putactions ? (
                 <select
                     className={`border px-2 py-1 rounded text-sm ${col.putactions.class || ""}`}
                     defaultValue={value}
-                    onChange={(e) => handlePutAction(e, col.putactions?.route, row.id)}
+                    onChange={(e) => {
+                        const route = col.putactions?.route;
+                        if (route) {
+                            handlePutAction(e, route, row.id);
+                        } else {
+                            console.warn("No route defined for putaction");
+                        }
+                    }}
+
                 >
                     {col.putactions.options.map((option, index) => (
                         <option key={index} value={option.value}>
@@ -203,7 +216,7 @@ const nestedCellContent = (col: NestedColumn, row: Record<string, any>) => {
 
         case "image":
             return value ? (
-                <img src={`/${value}`} alt="Profile" className="w-10  max-h-20 max-w-20 h-10 rounded-full object-cover" />
+                <img src={value} alt="Profile" className="w-10 h-10 rounded-full object-cover" />
             ) : (
                 <span className="text-gray-400">No Image</span>
             );
@@ -258,7 +271,15 @@ const nestedCellContent = (col: NestedColumn, row: Record<string, any>) => {
                 <select
                     className={`border px-2 py-1 rounded text-sm ${col.putactions.class || ""}`}
                     defaultValue={value}
-                    onChange={(e) => handlePutAction(e, col.putactions?.route, row.id)}
+                    onChange={(e) => {
+                        const route = col.putactions?.route;
+                        if (route) {
+                            handlePutAction(e, route, row.id);
+                        } else {
+                            console.warn("No route defined for putaction");
+                        }
+                    }}
+
                 >
                     {col.putactions.options.map((option, index) => (
                         <option key={index} value={option.value}>
@@ -281,17 +302,11 @@ const handlePutAction = async (event: React.ChangeEvent<HTMLSelectElement>, rout
         // const result = await axios.put(`${route}/${id}`, { value: selectedValue });
 
         router.put(`${route}/${id}`, { value: selectedValue }, {
-            onSuccess: (success) => {
-                let successMessage = "Status updated successfully!";
-                if (typeof success === "object" && success !== null) {
-                    successMessage = Object.values(success).flat().join("\n");
-                } else if (typeof success === "string") {
-                    successMessage = success;
-                }
+            onSuccess: () => {
                 Swal.fire({
                     toast: true,
                     title: "Success!",
-                    text: successMessage,
+                    text: "Status updated successfully!",
                     icon: "success",
                     position: "top-end",
                     timer: 3000,

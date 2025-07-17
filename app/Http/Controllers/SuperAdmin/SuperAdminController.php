@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rules\Password;
 use Stancl\Tenancy\Database\Models\Domain;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
 
 class SuperAdminController extends Controller
 {
@@ -277,5 +280,63 @@ class SuperAdminController extends Controller
     {
         return Inertia::render('SuperAdmin/Themes/Create');
     }
-    public function ThemeStore(Request $request) {}
+    public function ThemeStore(Request $request)
+    {
+        $request->validate([
+            'zipFile' => 'required|file|mimes:zip',
+        ]);
+        $zipFile = $request->file('zipFile');
+        $tmpPath = storage_path('app/temp-theme');
+        $zip = new ZipArchive;
+        // Cleanup before unzip
+        File::deleteDirectory($tmpPath);
+        File::makeDirectory($tmpPath, 0755, true);
+        if ($zip->open($zipFile) === true) {
+            $zip->extractTo($tmpPath);
+            $zip->close();
+        } else {
+            return response()->json(['error' => 'Unable to extract zip'], 400);
+        }
+        // Paths
+        $themeManifestPath = $tmpPath . '/build/manifest.json';
+        $mainManifestPath = public_path('build/manifest.json');
+        $assetsSourcePath = $tmpPath . '/build/assets';
+        $assetsTargetPath = public_path('build/assets');
+        // Step 1: Load both manifests
+        $themeManifest = json_decode(file_get_contents($themeManifestPath), true);
+        $mainManifest = json_decode(file_get_contents($mainManifestPath), true);
+        // Log before merge
+        Log::info('Before merge', [
+            'mainManifest' => $mainManifest,
+            'themeManifest' => $themeManifest,
+        ]);
+        // Ensure app.tsx key exists
+        if (!isset($mainManifest['resources/js/app.tsx'])) {
+            $mainManifest['resources/js/app.tsx'] = [
+                'dynamicImports' => []
+            ];
+        }
+        // Step 2: Add all theme keys to dynamicImports array
+        foreach ($themeManifest as $key => $value) {
+            $mainManifest[$key] = $value;
+
+            // Add only the key name, not value['dynamicImports']
+            if (!in_array($key, $mainManifest['resources/js/app.tsx']['dynamicImports'])) {
+                $mainManifest['resources/js/app.tsx']['dynamicImports'][] = $key;
+                Log::info("Added '{$key}' to dynamicImports.");
+            }
+        }
+        // Step 3: Save merged manifest
+        file_put_contents($mainManifestPath, json_encode($mainManifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
+        // Step 4: Copy assets if any
+        if (File::exists($assetsSourcePath)) {
+            File::copyDirectory($assetsSourcePath, $assetsTargetPath);
+            Log::info('Assets copied from temp-theme to public.');
+        }
+        // Cleanup
+        File::deleteDirectory($tmpPath);
+
+        return response()->json(['success' => true, 'message' => 'Theme uploaded and applied successfully.']);
+    }
 }
